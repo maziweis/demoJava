@@ -30,5 +30,6 @@ public class ThreadUnsafeExample {
         countDownLatch.await();
         executorService.shutdown();
         System.out.println(example.get());
+
     }
 }

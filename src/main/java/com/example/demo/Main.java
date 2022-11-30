@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Main {
 
     private int m;
@@ -9,11 +12,35 @@ public class Main {
     }
 
     public static void main(String[] args)throws Exception {
-        new Main().classTest();
-        Sun s= new Sun();
+//        Main.classTest();
+//        Main.SuperTest();
+        Main.FinalTest();
         System.out.println("main");
     }
-    public void classTest() throws Exception {
+
+    public static void FinalTest() {
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(()->{
+            FinalDemo.writer();
+        });
+        service.execute(()->{
+            try {
+                FinalDemo.reader();//可能抛异常，demo为null
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+        service.shutdown();
+    }
+    public static void SuperTest(){
+        Son s= new Son();
+        Parent p = new Son();
+        Parent p1 =new Parent();
+//        p.test1();
+        p1.test1();
+//        s.test();
+    }
+    public static void classTest() throws Exception {
         Class userClass = new User().getClass();
         // 获取Class对象的三种方式
         System.out.println("根据类名:  \t" + User.class);

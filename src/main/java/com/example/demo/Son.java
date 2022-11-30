@@ -1,10 +1,8 @@
 package com.example.demo;
 
-import javax.sound.midi.Soundbank;
+public class Son extends Parent{
 
-public class Sun extends Parent{
-
-    Sun(){
+    Son(){
         System.out.println("s constructor");
     }
     static {
@@ -12,5 +10,12 @@ public class Sun extends Parent{
     }
     {
         System.out.println("s kong");
+    }
+
+    public void test(){
+        System.out.println("son");
+    }
+    public void test2(){
+        System.out.println("son2");
     }
 }

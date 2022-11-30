@@ -11,4 +11,12 @@ public class Parent {
     {
         System.out.println("p kong");
     }
+
+    public void test(){
+        System.out.println("parent");
+    }
+    public void test1(){
+        test();
+        System.out.println("parent1");
+    }
 }

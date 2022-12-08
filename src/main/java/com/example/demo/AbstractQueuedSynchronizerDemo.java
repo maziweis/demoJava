@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+@SuppressWarnings("Annotator")
 public class AbstractQueuedSynchronizerDemo {
     public static void main(String[] args) {
         Lock lock = new ReentrantLock(true);

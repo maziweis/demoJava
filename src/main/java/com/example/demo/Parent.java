@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import lombok.Data;
+
+@Data
 public class Parent {
 
     Parent(){
@@ -19,4 +22,7 @@ public class Parent {
         test();
         System.out.println("parent1");
     }
+
+
+
 }

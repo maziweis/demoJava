@@ -6,6 +6,8 @@ public class FinalDemo {
     private final int b;//final域
     private  static FinalDemo finalDemo;
 
+
+
     public FinalDemo(){
         a=1;
         b=2;
@@ -21,6 +23,7 @@ public class FinalDemo {
         int a = demo.a;
         int b = demo.b;
         System.out.println("a="+a+",b="+b);
+
     }
 
 

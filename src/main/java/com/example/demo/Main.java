@@ -13,8 +13,8 @@ public class Main {
 
     public static void main(String[] args)throws Exception {
 //        Main.classTest();
-//        Main.SuperTest();
-        Main.FinalTest();
+        Main.SuperTest();
+//        Main.FinalTest();
         System.out.println("main");
     }
 
@@ -36,8 +36,8 @@ public class Main {
         Son s= new Son();
         Parent p = new Son();
         Parent p1 =new Parent();
-//        p.test1();
-        p1.test1();
+        p.test1();
+//        p1.test1();
 //        s.test();
     }
     public static void classTest() throws Exception {

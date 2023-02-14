@@ -12,7 +12,7 @@ public class Son extends Parent{
         System.out.println("s kong");
     }
 
-    public void test(){
+    public void test1(){
         System.out.println("son");
     }
     public void test2(){

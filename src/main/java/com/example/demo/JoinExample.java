@@ -19,11 +19,13 @@ public class JoinExample {
         @Override
         public void run() {
             try {
+                System.out.println("B-");
                 a.join();
-            }catch (InterruptedException e){
+                System.out.println("B+");
+            }catch (Exception e){
                 e.printStackTrace();
             }
-            System.out.println("B");
+
         }
     }
 

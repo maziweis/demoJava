@@ -12,13 +12,13 @@ import com.example.demo.Utils;
 public class BubbleSort {
     public static void main(String[] args) {
         int[] array = {1, 232, 454, 65, 32, 54, 76};
-        bubbleSort(array);
+        sort(array);
         for (int i : array) {
             System.out.println(i);
         }
     }
 
-    public static void bubbleSort(int[] a) {
+    public static void sort(int[] a) {
         int len = a.length;
         for (int i = 0; i < len - 1; i++) {
             for (int j = 0; j < len - 1 - i; j++) {

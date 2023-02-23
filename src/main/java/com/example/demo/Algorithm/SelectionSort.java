@@ -10,23 +10,24 @@ import com.example.demo.Utils;
  */
 public class SelectionSort {
     public static void main(String[] args) {
-        int[] a = {12,33,3,23,654,233,2,65};
-        selectionSort(a);
+        int[] a = {12, 33, 3, 23, 654, 233, 2, 65};
+        sort(a);
         for (int i : a) {
             System.out.println(i);
         }
     }
 
-    public static void selectionSort(int[] a){
-        int minIndex;
+    public static void sort(int[] a) {
         int len = a.length;
-        for (int i = 0; i < len -1 ; i++) {
+        int minIndex;
+        for (int i = 0; i < len - 1; i++) {
             minIndex = i;
-            for (int j = i+1; j < len; j++) {
-                if(a[j]<a[minIndex])  //寻找最小的数
-                    minIndex = j;   //保存最小数索引
+            for (int j = i + 1; j < len; j++) {
+                if (a[j] < a[minIndex]) {
+                    minIndex = j;
+                }
             }
-            Utils.swap(a,i,minIndex);
+            Utils.swap(a, minIndex, i);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.example.demo.Algorithm;
 
 import com.example.demo.Utils;
 
+import java.util.Arrays;
+
 /**
  * 选择排序 找到最小的和第i个互换，i= 0，1，2...
  * 首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，
@@ -12,9 +14,7 @@ public class SelectionSort {
     public static void main(String[] args) {
         int[] a = {12, 33, 3, 23, 654, 233, 2, 65};
         sort(a);
-        for (int i : a) {
-            System.out.println(i);
-        }
+        System.out.println(Arrays.toString(a));
     }
 
     public static void sort(int[] a) {

@@ -3,6 +3,8 @@ package com.example.demo.Algorithm;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 /**
  * 希尔排序
  * 第一次将数组拆成n/2个，将n/2->n的值和0->n/2的值进行比较互换
@@ -15,9 +17,7 @@ public class ShellSort {
     public static void main(String[] args) {
         int[] a = {12, 33, 3, 23, 654, 233, 2, 65, 1};
         sort(a);
-        for (int i : a) {
-            System.out.println(i);
-        }
+        System.out.println(Arrays.toString(a));
     }
 
     public static void sort(@NotNull int[] a) {

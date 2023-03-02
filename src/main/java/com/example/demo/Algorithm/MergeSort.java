@@ -13,9 +13,7 @@ public class MergeSort {
     public static void main(String[] args) {
         int[] a = {12, 33, 3, 23, 654, 233, 2, 65, 1};
         a = mergeSort(a);
-        for (int i : a) {
-            System.out.println(i);
-        }
+        System.out.println(Arrays.toString(a));
     }
 
     public static int[] mergeSort(int[] a) {

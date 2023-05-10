@@ -12,8 +12,38 @@ public class MergeSort {
 
     public static void main(String[] args) {
         int[] a = {12, 33, 3, 23, 654, 233, 2, 65, 1};
-        a = mergeSort(a);
+        a = mergeSort1(a);
         System.out.println(Arrays.toString(a));
+    }
+
+    public static int[] mergeSort1(int[] a) {
+        if (a.length == 1) {
+            return a;
+        }
+        int mid = a.length / 2;
+        int[] l = Arrays.copyOfRange(a, 0, mid);
+        int[] r = Arrays.copyOfRange(a, mid, a.length);
+        return sort1(mergeSort1(l), mergeSort1(r));
+    }
+
+    public static int[] sort1(int[] a, int[] b) {
+        if (a == null || b == null) {
+            return a == null ? b : a;
+        }
+        int i = 0, j = 0, x = 0;
+        int[] res = new int[a.length + b.length];
+        while (i < a.length || j < b.length) {
+            if (j == b.length) res[x++] = a[i++];
+            else if (i == a.length) res[x++] = b[j++];
+            else {
+                if (a[i] < b[j]) {
+                    res[x++] = a[i++];
+                } else {
+                    res[x++] = b[j++];
+                }
+            }
+        }
+        return res;
     }
 
     public static int[] mergeSort(int[] a) {

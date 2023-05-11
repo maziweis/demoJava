@@ -2,6 +2,7 @@ package com.example.demo;
 
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class HwOD {
 
@@ -11,11 +12,146 @@ public class HwOD {
 //        Object res = commonCode("private_void_method", "public_void_method ");
 //        getDanRuKou();
 //        Object res = reverseStrings("yM eman si boB.");
-        getStringSiteChar();
+//        getStringSiteChar();
+//        Object res = newspaper2anonymousLetter("ab bcd ef", "cd ef");
+//        huobizhuanhuan();
+        wanmeizouwei();
         System.out.println();
     }
 
-    public static void newspaper2anonymousLetter(String news, String letters) {
+    /**
+     * 11 完美走位
+     */
+    public static void wanmeizouwei() {
+        String s = "AASW";
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        for (int i = 0; i < s.length(); i++) {
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+        }
+        int avg = s.length() / 4;
+        int res = 0;
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > avg) {
+                res += entry.getValue() - avg;
+            }
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 10 货币单位换算
+     */
+    public static void huobizhuanhuan() {
+        int num = 2;
+        String[] lines = (
+                "20CNY53fen\n" +
+                        "\n" +
+                        "53HKD87cents"
+        ).split("\n\n");
+        double count = 0;
+        for (int i = 0; i < num; i++) {
+            String line = lines[i];
+            String[] split = line.split("\\d");
+            for (String s : split) {
+                if (s.isEmpty()) continue;
+                String no = line.substring(0, line.indexOf(s));
+                count += huansuan(no, s.charAt(0));
+                line = line.substring(line.indexOf(s) + s.length());
+            }
+        }
+        System.out.println(Math.round(Math.floor(count)));
+    }
+
+    public static double huansuan(String numStr, char str) {
+        double count = 0;
+        int num = Integer.valueOf(numStr);
+        if (str == 'C') {
+            count = num * 100;
+        } else if (str == 'J') {
+            count = (double) num * 10000 / 1825;
+        } else if (str == 'H') {
+            count = (double) num * 10000 / 123;
+        } else if (str == 'E') {
+            count = (double) num * 10000 / 14;
+        } else if (str == 'G') {
+            count = (double) num * 10000 / 12;
+        } else if (str == 'f') {
+            count = num * 1;
+        } else if (str == 's') {
+            count = (double) num * 100 / 1825;
+        } else if (str == 'c') {
+            count = (double) num * 100 / 123;
+        } else if (str == 'e') {
+            count = (double) num * 100 / 14;
+        } else if (str == 'p') {
+            count = (double) num * 100 / 12;
+        }
+        return count;
+    }
+
+    /**
+     * 9 关联端口组合并
+     */
+    public static void shuzujiaoji() {
+        int num = 6;
+        String[] str = (
+                "10\n" +
+                        "\n" +
+                        "4,2,1\n" +
+                        "\n" +
+                        "9\n" +
+                        "\n" +
+                        "3,6,9,2\n" +
+                        "\n" +
+                        "6,3,4\n" +
+                        "\n" +
+                        "8"
+        ).split("\n\n");
+        List<Set<Integer>> list = new ArrayList<Set<Integer>>();
+        for (int i = 0; i < num; i++) {
+            int[] duankou = Stream.of(str[i].split(",")).mapToInt(Integer::parseInt).toArray();
+            Set<Integer> set = new HashSet<Integer>();
+            if (duankou.length == 1) {
+                set.add(duankou[0]);
+                list.add(set);
+            } else {
+                for (int i1 : duankou) {
+                    set.add(i1);
+                }
+                list.add(set);
+                merge2Set(list, set, list.size() - 1);
+            }
+        }
+        System.out.println(list);
+    }
+
+    public static void merge2Set(List<Set<Integer>> list, Set<Integer> set, int index) {
+        for (int i = 0; i < list.size(); i++) {
+            if (i == index) continue;
+            Set<Integer> temp = new HashSet<>();
+            Set<Integer> seti = list.get(i);
+            temp.addAll(set);
+            temp.retainAll(seti);
+            if (temp.size() > 1) {
+                int before = index < i ? index : i;
+                int after = index < i ? i : index;
+                set.addAll(seti);
+                list.remove(after);
+                list.remove(before);
+                list.add(before, set);
+                merge2Set(list, set, before);
+            }
+        }
+    }
+
+    /**
+     * 8 分界线  匹配两个字符串
+     *
+     * @param news
+     * @param letters
+     * @return
+     */
+    public static boolean newspaper2anonymousLetter(String news, String letters) {
         String[] newspaper = news.split(" ");
         String[] anonymousLetter = letters.split(" ");
         for (String s : anonymousLetter) {
@@ -23,10 +159,14 @@ public class HwOD {
                 String n = newspaper[i];
                 if (s.length() == n.length() && change(s, n)) {
                     newspaper[i] = "";
-
+                    break;
+                }
+                if (i == newspaper.length - 1) {
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     /**

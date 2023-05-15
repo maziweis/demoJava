@@ -2,6 +2,7 @@ package com.example.demo;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HwOD {
@@ -15,8 +16,296 @@ public class HwOD {
 //        getStringSiteChar();
 //        Object res = newspaper2anonymousLetter("ab bcd ef", "cd ef");
 //        huobizhuanhuan();
-        wanmeizouwei();
-        System.out.println();
+//        wanmeizouwei();
+//        zidongbaoguang();
+//        Object res = logfenshu1();
+//        arrayCenter();
+//        zuiduanArraywuma();
+//        shangpindazhe();
+//        reverseJuZhen();
+        while (1 == 1) {
+            bigVersion();
+        }
+
+//        System.out.println();
+    }
+
+    /**
+     * 18 获取最大软件版本号
+     */
+    public static void bigVersion() {
+        Scanner sc = new Scanner(System.in);
+        String v1 = sc.nextLine();
+        String v2 = sc.nextLine();
+        String str1 = v1.split("-")[0];
+        String str2 = v2.split("-")[0];
+        int[] num1 = Arrays.stream(str1.split("\\.")).mapToInt(Integer::parseInt).toArray();
+        int[] num2 = Arrays.stream(str2.split("\\.")).mapToInt(Integer::parseInt).toArray();
+        for (int i = 0; i < 3; i++) {
+            if (i < num1.length && i < num2.length) {
+                if (num1[i] > num2[i]) {
+                    System.out.println(v1);
+                    return;
+                } else if (num1[i] < num2[i]) {
+                    System.out.println(v2);
+                    return;
+                }
+            } else {
+                System.out.println(str1.compareTo(str2) > 0 ? v1 : v2);
+                return;
+            }
+        }
+        if (v1.split("-").length == 2 && v2.split("-").length == 2) {
+            String beta1 = v1.split("-")[1];
+            String beta2 = v2.split("-")[1];
+            System.out.println(beta1.compareTo(beta2) > 0 ? v1 : v2);
+        } else {
+            System.out.println(v1);
+        }
+    }
+
+    /**
+     * 17 开心消消乐
+     */
+    public static void reverseJuZhen() {
+        int hang = 3, lie = 3;
+        String[] str = String.format(
+                        "1 0 1\n" +
+                                "\n" +
+                                "0 1 0\n" +
+                                "\n" +
+                                "1 0 1"
+                )
+                .replace("\n\n", " ").split(" ");
+
+        String[][] lines = new String[hang][lie];
+        for (int i = 0; i < hang; i++) {
+            for (int j = 0; j < lie; j++) {
+                lines[i][j] = str[i * lie + j];
+            }
+        }
+        int num = 0;
+        for (int i = 0; i < hang; i++) {
+            for (int j = 0; j < lie; j++) {
+                if (lines[i][j].equals("1")) {
+                    reverseJuZhenNode(lines, i, j);
+                    num++;
+                }
+            }
+        }
+        System.out.println(num);
+    }
+
+    public static void reverseJuZhenNode(String[][] lines, int i, int j) {
+        int hang = lines.length;
+        int lie = lines[0].length;
+        if (i < 0 || i >= hang || j < 0 || j >= lie || lines[i][j].equals("0")) {
+            return;
+        }
+        lines[i][j] = "0";
+        reverseJuZhenNode(lines, i - 1, j - 1);
+        reverseJuZhenNode(lines, i - 1, j);
+        reverseJuZhenNode(lines, i - 1, j + 1);
+        reverseJuZhenNode(lines, i, j - 1);
+        reverseJuZhenNode(lines, i, j + 1);
+        reverseJuZhenNode(lines, i + 1, j - 1);
+        reverseJuZhenNode(lines, i + 1, j);
+        reverseJuZhenNode(lines, i + 1, j + 1);
+    }
+
+    /**
+     * 16 网上商城优惠活动（一）
+     */
+    public static void shangpindazhe() {
+        Scanner scanner = new Scanner(System.in);
+        int manjian = scanner.nextInt();//满100减10 数量
+        int dazhe = scanner.nextInt();//打92折，限用一张
+        int wumenkan = scanner.nextInt();//无门槛减5元 数量
+        int renshu = scanner.nextInt(); //人数
+        List<Integer[]> list = new ArrayList<Integer[]>();
+        for (int i = 0; i < renshu; i++) {
+            int jiage = scanner.nextInt();
+            int youhuijia = Integer.MAX_VALUE;
+            int yhjsl = Integer.MAX_VALUE;
+            int youhuijiaT = 0;
+            //满减+打折
+            int mjNum = jiage / 100 > manjian ? manjian : jiage / 100;
+            if (dazhe > 0) {
+                youhuijiaT = (int) Math.floor((jiage - mjNum * 10) * 0.92);
+                if (youhuijia > youhuijiaT) {
+                    youhuijia = youhuijiaT;
+                    yhjsl = mjNum + 1;
+                }
+            }
+            //满减+无门槛
+            youhuijiaT = (int) Math.floor(jiage - mjNum * 10) - wumenkan * 5;
+            if (youhuijiaT < 0) { //特殊情况，优惠到0
+                youhuijia = 0;
+                yhjsl = yhjsl > (mjNum + (jiage + 4) / 5) ? mjNum + (jiage + 4) / 5 : yhjsl;
+            } else {
+                if (youhuijia > youhuijiaT) {
+                    youhuijia = youhuijiaT;
+                    yhjsl = mjNum + wumenkan;
+                } else if (youhuijia == youhuijiaT) {
+                    yhjsl = yhjsl > (mjNum + wumenkan) ? mjNum + wumenkan : yhjsl;
+                }
+            }
+            //打折+满减
+            youhuijiaT = (int) Math.floor(jiage * 0.92);
+            mjNum = youhuijiaT / 100 > manjian ? manjian : youhuijiaT / 100;
+            youhuijiaT -= mjNum * 10;
+            if (youhuijia > youhuijiaT) {
+                youhuijia = youhuijiaT;
+                yhjsl = mjNum + +1;
+            } else if (youhuijia == youhuijiaT) {
+                yhjsl = yhjsl > (mjNum + 1) ? mjNum + 1 : yhjsl;
+            }
+            //打折+无门槛
+            youhuijiaT = (int) Math.floor(jiage * 0.92) - wumenkan * 5;
+            if (youhuijiaT < 0) { //特殊情况，优惠到0
+                youhuijia = 0;
+                yhjsl = yhjsl > (1 + (jiage + 4) / 5) ? 1 + (jiage + 4) / 5 : yhjsl;
+            } else {
+                if (youhuijia > youhuijiaT) {
+                    youhuijia = youhuijiaT;
+                    yhjsl = 1 + wumenkan;
+                } else if (youhuijia == youhuijiaT) {
+                    yhjsl = yhjsl > (1 + wumenkan) ? 1 + wumenkan : yhjsl;
+                }
+            }
+            list.add(new Integer[]{youhuijia, yhjsl});
+            System.out.println(youhuijia + " " + yhjsl);
+        }
+        System.out.println(list);
+    }
+
+    /**
+     * 15 通信误码
+     */
+    public static void zuiduanArraywuma() {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        int[] nums = Arrays.stream(lines).mapToInt(Integer::parseInt).toArray();
+        int max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int count = map.getOrDefault(nums[i], 0);
+            map.put(nums[i], count + 1);
+            max = Math.max(max, count + 1);
+        }
+        List<Integer> result = new ArrayList<Integer>();
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == max) result.add(entry.getKey());
+        }
+        int min = Integer.MAX_VALUE;
+        List<Integer> list = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        for (int i = 0; i < result.size(); i++) {
+            int start = list.indexOf(result.get(i));
+            int end = list.lastIndexOf(result.get(i));
+            min = Math.min(min, end - start + 1);
+        }
+        System.out.println(min);
+    }
+
+    /**
+     * 14 数组的中心位置
+     */
+    public static void arrayCenter() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        int[] nums = Arrays.stream(lines).mapToInt(Integer::parseInt).toArray();
+        int ji = Arrays.stream(nums).reduce((a, b) -> a * b).getAsInt();
+        int left = 1, right = ji, index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            right /= nums[i];
+            if (i > 0) {
+                left *= nums[i - 1];
+            }
+            index = i;
+            if (left == right) break;
+        }
+        System.out.println(index);
+    }
+
+    /**
+     * 13 日志采集系统
+     *
+     * @return
+     */
+    public static int logfenshu1() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        int[] nums = Arrays.stream(lines).mapToInt(Integer::parseInt).toArray();
+        int pre, koufen = 0, total = 0, max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            pre = total;//前一位总数
+            total += nums[i];//当前总数
+            koufen += pre;//需要扣除的分数
+            if (total >= 100) {
+                total = 100;
+                max = Math.max(max, total - koufen);//总分
+                break;
+            }
+            max = Math.max(max, total - koufen);
+        }
+        return max;
+    }
+
+    /**
+     * 13 日志采集系统
+     *
+     * @return
+     */
+    public static int logfenshu() {
+        Scanner sc = new Scanner(System.in);
+        int[] nums = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int sum = nums[0];
+        if (nums[0] >= 100) return 100;
+        int count = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int log = nums[i];
+            count += log;
+            if (count >= 100) {
+                sum = Math.max(100 - koufen(nums, i), sum);
+                break;
+            } else {
+                sum = Math.max(count - koufen(nums, i), sum);
+            }
+        }
+        return sum;
+    }
+
+    public static int koufen(int[] nums, int index) {
+        int sum = 0;
+        for (int i = 0; i < index; i++) {
+            sum += nums[i] * (index - i);
+        }
+        return sum;
+    }
+
+    /**
+     * 12 简单的自动曝光
+     */
+    public static void zidongbaoguang() {
+        Scanner sc = new Scanner(System.in);//255 0 0 0
+        String[] lines = sc.nextLine().split(" ");
+        int[] nums = Arrays.stream(lines).mapToInt(Integer::parseInt).toArray();
+        int len = nums.length;
+        int sum = 128 * len;
+        int abs = Integer.MAX_VALUE;
+        int res = 0;
+        for (int i = -127; i < 129; i++) {
+            int sumT = 0;
+            for (int j = 0; j < len; j++) {
+                int temp = i + nums[j] < 0 ? 0 : i + nums[j] > 255 ? 255 : i + nums[j];
+                sumT += temp;
+            }
+            if (abs > Math.abs(sum - sumT)) {
+                abs = Math.abs(sum - sumT);
+                res = i;
+            }
+        }
+        System.out.println(res);
     }
 
     /**

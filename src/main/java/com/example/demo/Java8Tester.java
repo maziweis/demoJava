@@ -115,6 +115,9 @@ public class Java8Tester {
         System.out.println(sumValue);
         sumValue = Stream.of(1, 2, 3, 4).reduce(Integer::sum).get();
         System.out.println(sumValue);
+        int[] numI = integers.stream().mapToInt(Integer::intValue).toArray();
+        sumValue = Arrays.stream(numI).reduce(Integer::sum).getAsInt();
+        System.out.println(sumValue);
         concat = Stream.of("A", "B", "C", "D", "a", "v").filter(x -> x.compareTo("Z") > 0).reduce("", String::concat);
         System.out.println(concat);
     }

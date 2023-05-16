@@ -23,11 +23,123 @@ public class HwOD {
 //        zuiduanArraywuma();
 //        shangpindazhe();
 //        reverseJuZhen();
-        while (1 == 1) {
-            bigVersion();
-        }
+//        while (1 == 1) {
+//            bigVersion();
+//        }
+//        centerNode();
+//        duilietiaozheng();
+        jieMiString();
+
 
 //        System.out.println();
+    }
+
+    /**
+     * 21 字符串解密
+     */
+    public static void jieMiString() {
+        Scanner sc = new Scanner(System.in);
+        String s1 = sc.nextLine();
+        String s2 = sc.nextLine();
+        int len = getStrdisLength(s2);
+        String res = "";
+        String temp = "";
+        for (int i = 0; i < s1.length(); i++) {
+            char c = s1.charAt(i);
+            if (c > 'f' && c <= 'z') {
+                temp += c;
+                if (i < s1.length() - 1) continue;
+            }
+            if (getStrdisLength(temp) > 0 && getStrdisLength(temp) <= len) {
+                if (getStrdisLength(temp) > getStrdisLength(res)) {
+                    res = temp;
+                } else if (getStrdisLength(temp) == getStrdisLength(res) && temp.compareTo(res) > 0) {
+                    res = temp;
+                }
+                temp = "";
+            }
+        }
+        System.out.println(res.isEmpty() ? "Not Found" : res);
+    }
+
+    public static int getStrdisLength(String str) {
+        return Arrays.stream(str.split("")).distinct().toArray().length;
+    }
+
+    /**
+     * 20 最小的调整次数
+     */
+    public static void duilietiaozheng() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int reverse = 0;
+        sc.nextLine();
+        int index = 1;
+        Deque<Integer> queue = new ArrayDeque<Integer>();
+        for (int i = 0; i < 2 * n; i++) {
+            String[] s = sc.nextLine().split(" ");
+            if (s.length == 1) {
+                if (queue.peekFirst() != index) {
+                    Object[] objects = queue.toArray();
+                    Arrays.sort(objects);
+                    queue.clear();
+                    for (Object object : objects) {
+                        int num = Integer.parseInt(object.toString());
+                        queue.add(num);
+                    }
+                    reverse++;
+                }
+                queue.removeFirst();
+                index++;
+            } else {
+                if (s[0].equals("head")) {
+                    queue.addFirst(Integer.parseInt(s[2]));
+                } else {
+                    queue.addLast(Integer.parseInt(s[2]));
+                }
+            }
+        }
+        System.out.println(reverse);
+    }
+
+    /**
+     * 18 寻找链表的中间结点
+     */
+    public static void centerNode() {
+        Scanner sc = new Scanner(System.in);
+        String[] meta = sc.nextLine().split(" ");
+        int num = Integer.parseInt(meta[1]); //节点数量
+        List<String> nodes = new ArrayList<String>();
+        Map<String, Node> map = new HashMap<String, Node>();
+        for (int i = 0; i < num; i++) {
+            String[] strNode = sc.nextLine().split(" ");
+            map.put(strNode[0], new Node(strNode[0], strNode[1], strNode[2]));
+        }
+        Node cur = map.get(meta[0]);
+        while (true) {
+            nodes.add(cur.data);
+            if (cur.next.equals("-1")) {
+                break;
+            }
+            cur = map.get(cur.next);
+        }
+        System.out.println(nodes.get(nodes.size() / 2));
+    }
+
+    public static class Node {
+        String data;
+        String addr;
+        String next;
+
+        public Node() {
+
+        }
+
+        public Node(String addr, String data, String next) {
+            this.data = data;
+            this.next = next;
+            this.addr = addr;
+        }
     }
 
     /**

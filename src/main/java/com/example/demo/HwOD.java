@@ -1,6 +1,8 @@
 package com.example.demo;
 
 
+import lombok.Data;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -8,6 +10,7 @@ import java.util.stream.Stream;
 public class HwOD {
 
     public static void main(String[] args) {
+        {
 //        caizimi("conection", "connection,today");
 //        Object res = muban(5, 3, new int[]{5, 5, 5, 5, 5});
 //        Object res = commonCode("private_void_method", "public_void_method ");
@@ -28,10 +31,432 @@ public class HwOD {
 //        }
 //        centerNode();
 //        duilietiaozheng();
-        jieMiString();
+//        jieMiString();
+//        touLanDaSai();
+//            renWuZhiXingShiChang();
+//        zhaoShuZi();
+//        zhaJinHua();
+        }
+//        baixiangzi();
+//        yuanGongRecord();
+//        zifuchaunzichuan();
+        while (1 == 1) {
+//            tiquzichuan();
+//            cheliangyanse();
+            yuangongdaka();
+
+
+        }
 
 
 //        System.out.println();
+    }
+
+    /**
+     * 31 优秀学员统计
+     */
+    public static void yuangongdaka() {
+        Scanner sc = new Scanner(System.in);
+        int ygNum = sc.nextInt();
+        sc.nextLine();
+        int[] dkNum = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Map<Integer, yuagong> map = new HashMap<Integer, yuagong>();
+        for (int i = 0; i < ygNum; i++) {
+            yuagong y = new yuagong();
+            y.setId(i);
+            y.setTime(31);
+            y.setCount(0);
+            map.put(i, y);
+        }
+        for (int i = 0; i < dkNum.length; i++) {
+            int[] dkNumI = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            for (int j = 0; j < dkNumI.length; j++) {
+                int id = dkNumI[j];
+                yuagong yI = map.get(id);
+                yI.setCount(yI.getCount() + 1);
+                if (yI.getTime() == 31) {
+                    yI.setTime(i);
+                }
+            }
+        }
+        List<yuagong> collect = map.values().stream().sorted((a, b) -> {
+            if (b.getCount() > a.getCount()) {
+                return b.getCount() - a.getCount();
+            } else if (b.getCount() == a.getCount()) {
+                if (a.getTime() > b.getTime()) {
+                    return a.getTime() - b.getTime();
+                } else if (a.getTime() == b.getTime()) {
+                    return a.getId() - b.getId();
+                }
+            }
+            return -1;
+        }).filter(f -> f.getCount() > 0).collect(Collectors.toList());
+        collect.stream()
+                .limit(5).forEach(a -> {
+                    System.out.print(a.getId() + " ");
+                });
+    }
+
+    @Data
+    public static class yuagong {
+        int id;
+        int time;
+        int count;
+    }
+
+    /**
+     * 30 找出通过车辆最多颜色
+     */
+    public static void cheliangyanse() {
+        Scanner sc = new Scanner(System.in);
+        String[] s = sc.nextLine().split(" ");
+        int time = sc.nextInt();
+        int res = Integer.MIN_VALUE;
+        for (int i = 0; i < s.length - time + 1; i++) {
+            Map<String, Integer> map = new HashMap<>();
+            for (int j = i; j < time + i; j++) {
+                map.put(s[j], map.getOrDefault(s[j], 0) + 1);
+            }
+            int temp = map.values().stream().sorted().collect(Collectors.toList()).get(map.size() - 1);
+            res = res > temp ? res : temp;
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 29 最多提取子串数目
+     */
+    public static void tiquzichuan() {
+        Scanner sc = new Scanner(System.in);
+        String A = sc.nextLine();
+        String B = sc.nextLine();
+        List<String> a1 = Arrays.stream(A.split("")).collect(Collectors.toList());
+        int count = 0;
+        for (int i = 0; i < A.length() - B.length() + 1 && a1.size() > B.length(); i++) {
+            int num = 0;
+            for (int j = 0; j < B.length(); j++) {
+                if (a1.indexOf(B.charAt(j) + "") > -1) {
+                    a1.remove(B.charAt(j) + "");
+                    num++;
+                } else {
+                    System.out.println(count);
+                    return;
+                }
+            }
+            if (num == B.length()) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        System.out.println(count);
+    }
+
+    /**
+     * 28 最左侧冗余覆盖子串
+     *
+     * @return
+     */
+    public static int zifuchaunzichuan() {
+        Scanner sc = new Scanner(System.in);
+        String s1 = sc.nextLine();
+        String s2 = sc.nextLine();
+        int k = sc.nextInt();
+        int len = s1.length() + k;
+        for (int i = 0; i < s2.length() - len + 1; i++) {
+            List<String> temp = Arrays.stream(s2.substring(i, i + len).split("")).collect(Collectors.toList());
+            int count = 0;
+            for (int j = 0; j < s1.length(); j++) {
+                if (temp.indexOf(s1.charAt(j) + "") > -1) {
+                    temp.remove(s1.charAt(j) + "");
+                    count++;
+                }
+            }
+            if (count == s1.length()) {
+                System.out.println(i);
+                return i;
+            }
+        }
+        System.out.println(-1);
+        return -1;
+    }
+
+    /**
+     * 27 异常的打卡记录
+     */
+    public static void yuanGongRecord() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        List<Record> list = new ArrayList<Record>();
+        List<String> res = new ArrayList<String>();
+        Map<Integer, List<Record>> map = new HashMap<Integer, List<Record>>();
+        for (int i = 0; i < num; i++) {
+            String[] rec = sc.nextLine().split(",");
+            Record record = new Record();
+            record.setId(Integer.parseInt(rec[0]));
+            record.setTime(Integer.parseInt(rec[1]));
+            record.setDistance(Integer.parseInt(rec[2]));
+            record.setActualId(rec[3]);
+            record.setRegisterId(rec[4]);
+            list.add(record);
+            map.put(record.getId(), list);
+        }
+        map.entrySet().stream().forEach(entry -> {
+            List<Record> records = entry.getValue();
+            if (records.size() > 1) {
+                for (int j = 0; j < records.size(); j++) {
+                    Record record = records.get(j);
+                    if (!record.getActualId().equals(record.getRegisterId())) {
+                        res.add(record.toString());
+                        continue;
+                    }
+                    for (int k = 0; k < records.size(); k++) {
+                        if (j == k) continue;
+                        Record record1 = records.get(k);
+                        if (Math.abs(record1.getTime() - record.getTime()) < 60 && Math.abs(record1.getDistance() - record.getDistance()) > 5) {
+                            res.add(record.toString());
+                            continue;
+                        }
+                    }
+                }
+            }
+        });
+
+        System.out.println(String.join(";", res));
+    }
+
+    @Data
+    public static class Record {
+        private int id;
+        private int time;
+        private int distance;
+        private String actualId;
+        private String registerId;
+
+        public Record() {
+
+        }
+
+        public Record(int id, int time, int distance, String actualId, String registerId) {
+            this.id = id;
+            this.time = time;
+            this.distance = distance;
+            this.actualId = actualId;
+            this.registerId = registerId;
+        }
+
+        @Override
+        public String toString() {
+            return id +
+                    "," + time +
+                    "," + distance +
+                    "," + actualId +
+                    "," + registerId;
+        }
+    }
+
+    /**
+     * 26 箱子之形摆放
+     */
+    public static void baixiangzi() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        char[] xz = lines[0].toCharArray();
+        int hang = Integer.parseInt(lines[1]);
+        List<StringBuilder> list = new ArrayList<>();
+        for (int i = 0; i < hang; i++) {
+            list.add(new StringBuilder());
+        }
+        int index = 0;
+        boolean dist = true;
+        for (int i = 0; i < xz.length; i++) {
+            list.get(index).append(xz[i]);
+            if ((i + 1) % hang == 0) {
+                dist = !dist;
+                continue;
+            }
+            if (dist) index++;
+            else index--;
+        }
+        list.stream().forEach(a -> {
+            System.out.println(a.toString());
+        });
+    }
+
+    /**
+     * 25 整理扑克牌
+     */
+    public static void zhaJinHua() {
+        String[] strings = ("1\n" +
+                "\n" +
+                "1\n" +
+                "\n" +
+                "1\n" +
+                "\n" +
+                "2\n" +
+                "\n" +
+                "3\n" +
+                "\n" +
+                "3\n" +
+                "\n" +
+                "3\n" +
+                "\n" +
+                "4\n" +
+                "\n" +
+                "4\n" +
+                "\n" +
+                "4\n" +
+                "\n" +
+                "5\n" +
+                "\n" +
+                "5\n" +
+                "\n" +
+                "5").replace("\n\n", " ").split(" ");
+        List<KaPai> list = new ArrayList<KaPai>();
+        for (String s : strings) {
+            KaPai first = list.stream().filter(a -> a.k == Integer.parseInt(s)).findFirst().orElse(null);
+            if (first != null) {
+                first.count++;
+            } else {
+                list.add(new KaPai(Integer.parseInt(s), 1));
+            }
+        }
+        list.sort((a, b) -> {
+            if (b.count > a.count) {
+                return 1;
+            } else if (a.count == b.count) {
+                return b.k - a.k;
+            } else return -1;
+        });
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).count > 3) {
+                for (int j = 0; j < list.get(i).count; j++) {
+                    System.out.print(list.get(i).k + " ");
+                }
+                list.get(i).count = 0;
+            } else if (list.get(i).count == 3) {
+                for (int j = 0; j < list.get(i).count; j++) {
+                    System.out.print(list.get(i).k + " ");
+                }
+                list.get(i).count = 0;
+                i++;
+                if (list.get(i).count == 3) {
+                    System.out.print(list.get(i).k + " " + list.get(i).k + " ");
+                    list.get(i).count = 1;
+                } else if (list.get(i).count == 2) {
+                    System.out.print(list.get(i).k + " " + list.get(i).k + " ");
+                    list.get(i).count = 0;
+                } else break;
+            } else if (list.get(i).count == 2) {
+                System.out.print(list.get(i).k + " " + list.get(i).k + " ");
+                list.get(i).count = 0;
+            } else break;
+        }
+        list.stream().filter(s -> s.count == 1).sorted((a, b) -> b.k - a.k).forEach(a -> System.out.print(a.k + " "));
+    }
+
+    public static class KaPai {
+        int k;
+        int count;
+
+        public KaPai(int k, int count) {
+            this.k = k;
+            this.count = count;
+        }
+    }
+
+    /**
+     * 24 找数字
+     */
+    public static void zhaoShuZi() {
+        Scanner sc = new Scanner(System.in);
+        int hang = sc.nextInt();
+        int lie = sc.nextInt();
+        sc.nextLine();
+        String[][] juzhen = new String[hang][lie];
+        int[][] res = new int[hang][lie];
+        Map<String, List<Integer[]>> map = new HashMap<String, List<Integer[]>>();
+        for (int i = 0; i < hang; i++) {
+            String[] lines = sc.nextLine().split(" ");
+            juzhen[i] = lines;
+            for (int j = 0; j < lines.length; j++) {
+                String s = lines[j];
+                List<Integer[]> list = map.get(s);
+                if (list == null) {
+                    list = new ArrayList<Integer[]>();
+                }
+                Integer[] zuobiao = new Integer[]{i, j};
+                list.add(zuobiao);
+                map.put(s, list);
+            }
+        }
+        for (int i = 0; i < hang; i++) {
+            for (int j = 0; j < lie; j++) {
+                res[i][j] = getJuZhenJuLi(juzhen, i, j, map);
+            }
+        }
+        System.out.println(res);
+    }
+
+    public static int getJuZhenJuLi(String[][] juzhen, int i, int j, Map<String, List<Integer[]>> map) {
+        String num = juzhen[i][j];
+        List<Integer[]> list = map.get(num);
+        int min = Integer.MAX_VALUE;
+        for (Integer[] ints : list) {
+            if (ints[0] != i || ints[1] != j) {
+                int juli = Math.abs(ints[0] - i) + Math.abs(ints[1] - j);
+                min = Math.min(min, juli);
+            }
+        }
+        return min == Integer.MAX_VALUE ? -1 : min;
+    }
+
+    /**
+     * 23 任务总执行时长
+     */
+    public static void renWuZhiXingShiChang() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(",");
+        int task1 = Integer.parseInt(lines[0]);
+        int task2 = Integer.parseInt(lines[1]);
+        int num = Integer.parseInt(lines[2]);
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i <= num; i++) {
+            int res = task1 * (num - i) + task2 * i;
+            set.add(res);
+        }
+        System.out.println(set);
+    }
+
+
+    /**
+     * 22 投篮大赛
+     *
+     * @return
+     */
+    public static int touLanDaSai() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        List<Integer> list = new ArrayList<>();
+        int sum = 0;
+        for (int i = 0; i < lines.length; i++) {
+            String s = lines[i];
+            if ((s.equals("C") || s.equals("D")) && list.size() == 0) return -1;
+            if (s.equals("+") && list.size() < 2) return -1;
+            if (s.equals("C")) {
+                list.remove(list.size() - 1);
+            } else if (s.equals("D")) {
+                list.add(list.get(list.size() - 1) * 2);
+            } else if (s.equals("+")) {
+                list.add(list.get(list.size() - 1) + list.get(list.size() - 2));
+            } else {
+                list.add(Integer.parseInt(s));
+            }
+        }
+        sum = list.stream().reduce(Integer::sum).get();
+        System.out.println(sum);
+        return sum;
     }
 
     /**

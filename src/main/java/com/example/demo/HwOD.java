@@ -37,19 +37,372 @@ public class HwOD {
 //        zhaoShuZi();
 //        zhaJinHua();
         }
+        {
 //        baixiangzi();
 //        yuanGongRecord();
 //        zifuchaunzichuan();
-        while (1 == 1) {
 //            tiquzichuan();
 //            cheliangyanse();
-            yuangongdaka();
+//            yuangongdaka();
+//            qiche();
+//        jimushuzijuli();
+//        gongzuoanpai();
+//            xuanzejiudian();
+//            xuexiaoweizhi1();
+//            xunzhaomima();
+//            xunzhaoyaoshi();
+//            chongdianzhan();
+//            chongdianshebei();
+        }
+        while (1 == 1) {
+//            zhishitupu();
+//            jingtaidaimasaomiao();
+            guoyuanshifei();
 
 
         }
 
 
-//        System.out.println();
+    }
+
+    /**
+     * 42 不爱施肥的小布
+     */
+    public static void guoyuanshifei() {
+        Scanner sc = new Scanner(System.in);
+        int[] num = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] len = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        if (num[0] > num[1]) {
+            System.out.println(-1);
+            return;
+        }
+        Arrays.sort(len);
+        int l = len[0];
+        int r = len[num[0] - 1];
+        while (r > l) {
+            int mid = (l + r) / 2;
+            int ans = 0;
+            for (int i = 0; i < num[0]; i++) {
+                int temp = (len[i] + mid - 1) / mid;
+                ans += temp;
+            }
+            if (ans <= num[1]) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        System.out.println(l);
+    }
+
+    /**
+     * 41 静态代码扫描服务
+     */
+    public static void jingtaidaimasaomiao() {
+        Scanner sc = new Scanner(System.in);
+        int huancun = sc.nextInt();
+        sc.nextLine();
+        int[] biaoshi = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] daxiao = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Map<Integer, Integer> nonum = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> nosize = new HashMap<Integer, Integer>();
+        for (int i = 0; i < biaoshi.length; i++) {
+            nonum.put(biaoshi[i], nonum.getOrDefault(biaoshi[i], 0) + 1);
+            nosize.put(biaoshi[i], daxiao[i]);
+        }
+        int res = 0;
+        for (Map.Entry<Integer, Integer> entry : nonum.entrySet()) {
+            int huancunI = nosize.get(entry.getKey()) + huancun;
+            int saomiaoI = nosize.get(entry.getKey()) * entry.getValue();
+            res += Math.min(huancunI, saomiaoI);
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 40 知识图谱新词挖掘1
+     */
+    public static void zhishitupu() {
+        Scanner sc = new Scanner(System.in);
+        String content = sc.nextLine();
+        String word = sc.nextLine();
+        String newWord = stringSort(word);
+        int res = 0;
+        for (int i = 0; i < content.length() - newWord.length() + 1; i++) {
+            String temp = stringSort(content.substring(i, newWord.length() + i));
+            if (temp.equals(newWord)) {
+                res++;
+            }
+        }
+        System.out.println(res);
+        System.out.println();
+    }
+
+    public static String stringSort(String str) {
+        String[] chars = str.split("");
+        Arrays.sort(chars);
+        return String.join("", chars);
+    }
+
+    /**
+     * 39 查找充电设备组合  回溯
+     */
+    public static void chongdianshebei() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] gl = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int max = sc.nextInt();
+        chongdianMax = 0;
+        backTrackChongDian(gl, 0, max, 0);
+        System.out.println(chongdianMax);
+    }
+
+    static int chongdianMax = 0;
+
+    public static void backTrackChongDian(int[] gl, int index, int max, int sum) {
+        if (index >= gl.length || sum >= max) {
+            if (sum == max) {
+                chongdianMax = max;
+            } else {
+                chongdianMax = Math.max(chongdianMax, sum - gl[index - 1]);
+            }
+        } else {
+            for (int i = index; i < gl.length; i++) {
+                sum += gl[i];
+                backTrackChongDian(gl, i + 1, max, sum);
+                sum -= gl[i];
+            }
+        }
+    }
+
+    /**
+     * 39 查找充电设备组合
+     */
+    public static void chongdianzhan() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] cdz = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int max = sc.nextInt();
+        int[][] result = new int[num + 1][max + 1];
+        for (int i = 1; i < result.length; i++) {
+            for (int j = 0; j < result[0].length; j++) {
+                if (j < cdz[i - 1]) {
+                    result[i][j] = result[i - 1][j];
+                } else {
+                    result[i][j] = Math.max(result[i - 1][j], result[i - 1][j - cdz[i - 1]] + cdz[i - 1]);
+                }
+            }
+        }
+        System.out.println(result[num][max]);
+        System.out.println();
+    }
+
+    /**
+     * 38 寻找关键钥匙
+     */
+    public static void xunzhaoyaoshi() {
+        Scanner sc = new Scanner(System.in);
+        String key = sc.nextLine().toLowerCase();
+        String[] lines = sc.nextLine().toLowerCase().split(" ");
+        String lKey = String.join("", Arrays.stream(key.split("")).sorted().collect(Collectors.toList()));
+        for (int i = 0; i < lines.length; i++) {
+            String temp = lines[i];
+            String ch = "";
+            for (int j = 0; j < temp.length(); j++) {
+                if (temp.charAt(j) >= 'a' && temp.charAt(j) <= 'z') {
+                    ch += temp.charAt(j);
+                }
+            }
+            ch = String.join("", Arrays.stream(ch.split("")).sorted().collect(Collectors.toList()));
+            if (lKey.equals(ch)) {
+                System.out.println(i + 1);
+                return;
+            }
+        }
+        System.out.println(-1);
+    }
+
+    /**
+     * 37 寻找密码
+     */
+    public static void xunzhaomima() {
+        Scanner sc = new Scanner(System.in);
+        List<String> lines = Arrays.stream(sc.nextLine().split(" ")).collect(Collectors.toList());
+        lines.sort((a, b) -> a.compareTo(b));
+        boolean res = false;
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            String s = lines.get(i);
+            for (int j = s.length() - 1; j >= 0; j--) {
+                if (lines.indexOf(s.substring(0, j)) == -1) {
+                    break;
+                }
+                if (j == 1)
+                    res = true;
+            }
+            if (res) {
+                System.out.println(s);
+                break;
+            }
+        }
+        if (!res)
+            System.out.println();
+    }
+
+    /**
+     * 36 学校的位置
+     */
+    public static void xuexiaoweizhi() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] weizhi = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(weizhi);
+        int juli = Integer.MAX_VALUE;
+        int zuobiao = 0;
+        for (int i = weizhi[0]; i <= weizhi[num - 1]; i++) {
+            int count = 0;
+            for (int j = 0; j < num; j++) {
+                count += Math.abs(i - weizhi[j]);
+            }
+            if (juli > count) {
+                juli = count;
+                zuobiao = i;
+            }
+        }
+        System.out.println(zuobiao);
+    }
+
+    /**
+     * 36 学校的位置 满
+     */
+    public static void xuexiaoweizhi1() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] weizhi = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(weizhi);
+        if (num % 2 == 0) {
+            System.out.println(weizhi[num / 2 - 1]);
+        } else {
+            System.out.println(weizhi[num / 2]);
+        }
+    }
+
+    /**
+     * 35 预定酒店
+     */
+    public static void xuanzejiudian() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] jiage = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        List<JiuDian> list = new ArrayList<JiuDian>();
+        for (int i = 0; i < lines[0]; i++) {
+            JiuDian jiuDian = new JiuDian();
+            jiuDian.setJiage(jiage[i]);
+            jiuDian.setValue(Math.abs(jiage[i] - lines[2]));
+            list.add(jiuDian);
+        }
+        list.sort((a, b) -> {
+            if (a.getValue() != b.getValue()) {
+                return a.getValue() - b.getValue();
+            } else {
+                return a.getJiage() - b.getJiage();
+            }
+        });
+        List<JiuDian> collect = list.stream().limit(lines[1]).collect(Collectors.toList());
+        collect.stream().sorted((a, b) -> a.getJiage() - b.getJiage()).forEach(a -> {
+            System.out.print(a.getJiage() + " ");
+        });
+        System.out.println();
+    }
+
+    @Data
+    public static class JiuDian {
+        int jiage;
+        int value;
+    }
+
+    /**
+     * 34 工作安排
+     * https://note.youdao.com/web/#/file/WEB1d22ba627f7285b7c4572edf7f914560/note/WEB5b7ab9a3e5bd088e8e18a464284a1bae/
+     */
+    public static void gongzuoanpai() {
+        Scanner sc = new Scanner(System.in);
+        int time = sc.nextInt(); //列
+        int num = sc.nextInt(); //行
+        int[] t = new int[num];
+        int[] v = new int[num];
+        int[][] workValues = new int[num + 1][time + 1];// 从第一行开始（i=1），到第time列结束
+        for (int i = 0; i < num; i++) {
+            t[i] = sc.nextInt();
+            v[i] = sc.nextInt();
+        }
+        for (int i = 1; i < num + 1; i++) {
+            for (int j = 0; j < time + 1; j++) {
+                if (t[i - 1] > j) {
+                    workValues[i][j] = workValues[i - 1][j];//如果当前时间小于用工时间，则当前值等于上一行本列的值
+                } else {
+                    workValues[i][j] = Math.max(workValues[i - 1][j], workValues[i - 1][j - t[i - 1]] + v[i - 1]);//否则，比较上一行当前列的值 和 上一行总时间减去当前用工所需时间位置格子的值+当前值
+                }
+            }
+        }
+        System.out.println(workValues[num][time]);
+    }
+
+    /**
+     * 33 相同数字的积木游戏1
+     */
+    public static void jimushuzijuli() {
+        int num = 5;
+        String lines = "1\n" +
+                "\n" +
+                "1\n" +
+                "\n" +
+                "3\n" +
+                "\n" +
+                "1\n" +
+                "\n" +
+                "4";
+        List<String> list = Arrays.stream(lines.split("\n\n")).collect(Collectors.toList());
+        int juli = -1;
+        for (int i = 0; i < list.size(); i++) {
+            int lI = list.lastIndexOf(list.get(i));
+            if (lI > i) {
+                juli = Math.max(juli, lI - i);
+            }
+        }
+        System.out.println(juli);
+    }
+
+    /**
+     * 32 租车骑绿道
+     */
+    public static void qiche() {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        int[] tizhong = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(tizhong);
+        int num = 0;
+        for (int i = n - 1, j = 0; i >= 0 && j <= i; i--) {
+            if (i == j) {
+                num++;
+                break;
+            }
+            if (tizhong[i] + tizhong[j] <= m) {
+                tizhong[i] = 0;
+                tizhong[j] = 0;
+                j++;
+                num++;
+            } else {
+                tizhong[i] = 0;
+                num++;
+            }
+        }
+        System.out.println(num);
     }
 
     /**

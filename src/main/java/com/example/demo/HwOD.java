@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//https://blog.csdn.net/qq_34465338/article/details/128330728
 public class HwOD {
 
     public static void main(String[] args) {
@@ -57,12 +58,95 @@ public class HwOD {
         while (1 == 1) {
 //            zhishitupu();
 //            jingtaidaimasaomiao();
-            guoyuanshifei();
-
+//            guoyuanshifei();
+            chuliqi();
 
         }
 
 
+    }
+
+    /**
+     * 43 AI处理器组合
+     */
+    public static void chuliqi() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().replace("[", "").replace("]", "").split(",");
+        int num = sc.nextInt();
+        int[] one = new int[]{1, 3, 2, 4};
+        int[] two = new int[]{2, 4, 3};
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        List<List<Integer>> tempList = new ArrayList<List<Integer>>();
+        List<Integer> listL = new ArrayList<Integer>();
+        List<Integer> listR = new ArrayList<Integer>();
+        for (int i = 0; i < lines.length; i++) {
+            int temp = Integer.parseInt(lines[i].trim());
+            if (temp < 4) {
+                listL.add(temp);
+            } else {
+                listR.add(temp);
+            }
+        }
+        int sizeL = listL.size();
+        int sizeR = listR.size();
+        if (num == 1) {
+            for (int i = 0; i < one.length; i++) {
+                if (sizeL == one[i]) {
+                    tempList.add(listL);
+                    backTrackChuLiQi(list, listL, new ArrayList<Integer>(), 1, 0);
+                }
+                if (sizeR == one[i]) {
+                    tempList.add(listR);
+                    backTrackChuLiQi(list, listR, new ArrayList<Integer>(), 1, 0);
+                }
+                if (tempList.size() > 0) {
+                    break;
+                }
+            }
+        }
+        if (num == 2) {
+            for (int i = 0; i < two.length; i++) {
+                if (sizeL == two[i]) {
+                    tempList.add(listL);
+                    backTrackChuLiQi(list, listL, new ArrayList<Integer>(), 2, 0);
+                }
+                if (sizeR == two[i]) {
+                    tempList.add(listR);
+                    backTrackChuLiQi(list, listR, new ArrayList<Integer>(), 2, 0);
+                }
+                if (tempList.size() > 0) {
+                    break;
+                }
+            }
+        }
+        if (num == 4) {
+            if (sizeL == 4) {
+                list.add(listL);
+            }
+            if (sizeR == 4) {
+                list.add(listR);
+            }
+        }
+        if (num == 8) {
+            if (lines.length == 8) {
+                listL.addAll(listR);
+                list.add(listL);
+            }
+        }
+        System.out.println(list);
+    }
+
+    public static void backTrackChuLiQi(List<List<Integer>> res, List<Integer> ori, List<Integer> temp, int num, int index) {
+        if (temp.size() == num || index == ori.size()) {
+            if (temp.size() == num)
+                res.add(new ArrayList<>(temp));
+        } else {
+            for (int i = index; i < ori.size(); i++) {
+                temp.add(ori.get(i));
+                backTrackChuLiQi(res, ori, temp, num, i + 1);
+                temp.remove(ori.get(i));
+            }
+        }
     }
 
     /**

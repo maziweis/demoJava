@@ -8,51 +8,66 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
+
         int n = sc.nextInt();
-        int[] fields = new int[m];
-        for (int i = 0; i < m; i++) {
-            fields[i] = sc.nextInt();
-        }
+        sc.nextLine();
+        int[] L = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-        int l = 1;  //最低能效
-        int r = Arrays.stream(fields).max().getAsInt();     //最高能效
-        while (l < r) {
-            int mid = (l + r) / 2;      //取中位数
-            if (check(mid, fields) <= n) {    //判断能效施肥满足天数要求
-                r = mid;    //满足要求，右边界缩小
-            } else {
-                l = mid + 1;    //不满足，左边界缩小
+        //最大连续棋子长度
+        int max = Integer.MIN_VALUE;
+        //到中间位置的距离
+        int midDistance = 0;
+        //最终下标
+        int res = -1;
+        for (int i = 0; i < L.length; i++) {
+
+            if (L[i] == 0) {
+                //左指针
+                int left = i - 1;
+                //右指针
+                int right = i + 1;
+                //左侧相同棋子的个数
+                int totalLeft = 0;
+                //右侧相同棋子的个数
+                int totalRight = 0;
+                //左侧棋子统计
+                for (int j = left; j >= 0; j--) {
+                    if (L[j] == n) {
+                        totalLeft++;
+                    } else {
+                        break;
+                    }
+                }
+                //右侧棋子统计
+                for (int j = right; j < L.length; j++) {
+                    if (L[j] == n) {
+                        totalRight++;
+                    } else {
+                        break;
+                    }
+                }
+                //两侧总共的棋子
+                int total = totalLeft + totalRight;
+                //题目要求不能赢
+                if (total > 4) {
+                    continue;
+                }
+                //坐标到中间位置距离
+                int indexToMid = Math.abs(i - L.length / 2);
+                if (total > max) {
+                    //大于之前的最大值
+                    max = total;
+                    res = i;
+                    midDistance = indexToMid;
+                } else if (total == max && indexToMid < midDistance) {
+                    //等于之前的最大值且距离中间位置较近
+                    res = i;
+                    midDistance = indexToMid;
+                }
             }
-        }
-
-        if (check(l, fields) > n) {
-            System.out.println(-1);
-        } else {
-            System.out.println(l);
-        }
-    }
-
-    /**
-     * 判断mid能效需要几天完成施肥
-     *
-     * @param mid    能效
-     * @param fields 面积数组
-     * @return
-     */
-    public static int check(int mid, int[] fields) {
-
-        int ans = 0;
-        for (int i = 0; i < fields.length; i++) {
-
-            if (fields[i] % mid == 0) {  //能整除能效则直接添加，否则需要+1
-                ans += fields[i] / mid;
-            } else {
-                ans += fields[i] / mid + 1;
-            }
 
         }
 
-        return ans;
+        System.out.println(res);
     }
 }

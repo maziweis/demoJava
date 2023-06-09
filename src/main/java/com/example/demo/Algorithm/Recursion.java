@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Algorithm;
 
 public class Recursion {
     public static void main(String[] args) {

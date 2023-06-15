@@ -72,6 +72,434 @@ public class HwOD2023B {
 
     //int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
+    public static void yijuxingqiugaizao() {
+        Scanner sc = new Scanner(System.in);
+        List<String> lines = new ArrayList<String>();
+        String[][] source = new String[][]{};
+        while (sc.hasNext()) {
+            lines.add(sc.nextLine());
+        }
+        for (int i = 0; i < lines.size(); i++) {
+            source[i] = lines.get(i).split(" ");
+        }
+        String[][] temp = Arrays.copyOf(source, source.length);
+        int row = temp.length;
+        int column = temp[0].length;
+        int day = 0;
+        boolean found = true;
+        while (found) {
+            found = false;
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    if (source[i][j] == "YES") {
+                        if (xingqiugaizao(temp, i, j)) {
+                            found = true;
+                        }
+                    }
+                }
+            }
+            day++;
+            source = Arrays.copyOf(temp, source.length);
+        }
+    }
+
+    public static boolean xingqiugaizao(String[][] temp, int i, int j) {
+        boolean found = false;
+        if (i > 0 && temp[i - 1][j].equals("NO")) {
+            temp[i - 1][j] = "YES";
+            found = true;
+        }
+        if (i < temp.length && temp[i + 1][j].equals("NO")) {
+            temp[i + 1][j] = "YES";
+            found = true;
+        }
+        if (j > 0 && temp[i][j - 1].equals("NO")) {
+            temp[i][j - 1] = "YES";
+            found = true;
+        }
+        if (j < temp[0].length && temp[i][j + 1].equals("NO")) {
+            temp[i][j + 1] = "YES";
+            found = true;
+        }
+        return found;
+    }
+
+
+////////////////////////////////////////初阶////////////////////////////////////////
+
+    /**
+     * 65  判断字符串子序列
+     */
+    public static void stringzixulie() {
+        Scanner sc = new Scanner(System.in);
+        String target = sc.nextLine();
+        String source = sc.nextLine();
+        int index = source.length() - 1;
+        for (int i = target.length() - 1; i >= 0; i--) {
+            char c = target.charAt(i);
+            boolean found = false;
+            for (int j = index; j >= 0; j--) {
+                char ch = source.charAt(j);
+                if (c == ch) {
+                    found = true;
+                    index = j - 1;
+                    break;
+                }
+            }
+            if (!found) {
+                System.out.println(-1);
+                return;
+            }
+            if (i == 0) {
+                System.out.println(index + 1);
+                return;
+            }
+        }
+    }
+
+    /**
+     * 64  勾股数元组
+     */
+    public static void gougushuyuanzu() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean flag = true;
+        for (int i = n; i < m - 1; i++) {
+            for (int j = i + 1; j < m; j++) {
+                for (int k = j + 1; k < m + 1; k++) {
+                    if (i * i + j * j < k * k) {
+                        break;
+                    } else if (i * i + j * j == k * k) {
+                        if (iszhishu(i, j) && iszhishu(j, k) && iszhishu(i, k)) {
+                            System.out.println(i + " " + j + " " + k);
+                            flag = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (flag) {
+            System.out.println("NA");
+        }
+    }
+
+    public static boolean iszhishu(int a, int b) {
+        int yushu = 0;
+        while (a % b != 0) {
+            yushu = a % b;
+            a = b;
+            b = yushu;
+        }
+        return b == 1;
+    }
+
+    /**
+     * 63  恢复数字序列
+     */
+    public static void huifushuzixulie() {
+        Scanner sc = new Scanner(System.in);
+        long[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToLong(Long::parseLong).toArray();
+        long shulie = lines[0];
+        String shulieStr = Arrays.stream((shulie + "").split("")).sorted().collect(Collectors.joining(""));
+        int n = (int) lines[1];
+        for (int i = 1; i < 1000; i++) {
+            String temp = "";
+            for (int j = i; j < n + i; j++) {
+                temp += j;
+            }
+            temp = Arrays.stream(temp.split("")).sorted().collect(Collectors.joining(""));
+            if (temp.equals(shulieStr)) {
+                System.out.println(i);
+                return;
+            }
+        }
+
+    }
+
+    /**
+     * 62  ai面板识别
+     */
+    public static void aimianbanshibie() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        List<Panel> list = new ArrayList<Panel>();
+        for (int i = 0; i < n; i++) {
+            int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            Panel panel = new Panel(lines[0], lines[1], lines[2], lines[3], lines[4]);
+            list.add(panel);
+        }
+        Collections.sort(list);
+        Panel jizhun = list.get(0);
+        int banjing = (jizhun.y2 - jizhun.y1) / 2;
+        for (int i = 1; i < list.size(); i++) {
+            Panel panel = list.get(i);
+            if (panel.y1 - jizhun.y1 <= banjing) {
+                panel.y1 = jizhun.y1;
+                panel.y2 = jizhun.y2;
+            } else {
+                jizhun = panel;
+            }
+        }
+        Collections.sort(list);
+        String res = "";
+        for (int i = 0; i < list.size(); i++) {
+            res += list.get(i).id + " ";
+        }
+        System.out.println(res.substring(0, res.length() - 1));
+    }
+
+    static class Panel implements Comparable<Panel> {
+        int id;
+        int x1;
+        int y1;
+        int x2;
+        int y2;
+
+        public Panel(int id, int x1, int y1, int x2, int y2) {
+            this.id = id;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+
+        @Override
+        public int compareTo(@NotNull Panel o) {
+            if (this.y1 == o.y1) {
+                return this.x1 - o.x1;
+            }
+            return this.y1 - o.y1;
+        }
+    }
+
+    /**
+     * 61 支持优先级的队列
+     */
+    public static void youxianjiduilie() {
+        Scanner sc = new Scanner(System.in);
+        String in = sc.nextLine();
+        String[] lines = in.substring(1, in.length() - 1).split("\\),\\(");
+        Set<String> set = new HashSet<String>();
+        List<Task> list = new ArrayList<Task>();
+        set.addAll(Arrays.asList(lines));
+        set.forEach(s -> {
+            Task task = new Task();
+            task.num = Integer.parseInt(s.split(",")[0]);
+            task.power = Integer.parseInt(s.split(",")[1]);
+            task.index = list.size();
+            list.add(task);
+        });
+        Collections.sort(list);
+        List<String> res = new ArrayList<String>();
+        for (int i = 0; i < list.size(); i++) {
+            res.add(list.get(i).num + "");
+        }
+        System.out.println(String.join(",", res));
+    }
+
+    static class Task implements Comparable<Task> {
+        int index;
+        int num;
+        int power;
+
+        @Override
+        public int compareTo(@NotNull Task o) {
+            if (this.power == o.power) {
+                return this.index - o.index;
+            }
+            return o.power - this.power;
+        }
+    }
+
+    /**
+     * 60 矩阵最大值
+     */
+    public static void juzhenzuidazhi() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            String si = sc.nextLine().replace(",", "");
+            int max = 0;
+            for (int j = 0; j < n; j++) {
+                String sj = si.substring(j) + si.substring(0, j);
+                int num = Integer.parseInt(sj, 2);
+                max = Math.max(max, num);
+            }
+            res += max;
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 59  矩阵稀疏扫描
+     */
+    public static void juzhenxishusaomiao() {
+        Scanner sc = new Scanner(System.in);
+        int row = sc.nextInt();
+        int col = sc.nextInt();
+        sc.nextLine();
+        String srow = String.format("%" + col / 2 + "s", "");
+        String scol = String.format("%" + row / 2 + "s", "");
+        srow = srow.replaceAll("\\s", "0");
+        scol = scol.replaceAll("\\s", "0");
+        int rnum = 0;
+        int cnum = 0;
+        int[][] lines = new int[row][col];
+        int[][] lines1 = new int[col][row];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                int in = sc.nextInt();
+                lines[i][j] = in;
+                lines1[j][i] = in;
+            }
+            String tRow = String.join("", Arrays.stream(lines[i]).boxed().map(String::valueOf).collect(Collectors.toList()));
+            if (tRow.contains(srow)) {
+                rnum++;
+            }
+        }
+        for (int i = 0; i < lines1.length; i++) {
+            String tCol = String.join("", Arrays.stream(lines1[i]).boxed().map(String::valueOf).collect(Collectors.toList()));
+            if (tCol.contains(scol)) {
+                cnum++;
+            }
+        }
+        System.out.println(rnum);
+        System.out.println(cnum);
+    }
+
+    /**
+     * 58  最长连续子序列
+     */
+    public static void zuichanglianxuzixulie() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int sum = sc.nextInt();
+        int max = -1;
+        int temp = 0;
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i] == sum) {
+                max = Math.max(max, 1);
+                continue;
+            }
+            temp = lines[i];
+            for (int j = i + 1; j < lines.length; j++) {
+                temp += lines[j];
+                if (temp == sum) {
+                    max = Math.max(max, j - i + 1);
+                } else if (temp > sum) {
+                    break;
+                }
+            }
+        }
+        System.out.println(max);
+    }
+
+    /**
+     * 57 计算最大乘积
+     */
+    public static void jisuanzuidachengji() {
+        Scanner sc = new Scanner(System.in);
+        String[] s = sc.nextLine().split(",");
+        int max = 0;
+        for (int i = 0; i < s.length; i++) {
+            String si = s[i];
+            for (int j = i + 1; j < s.length; j++) {
+                Set<String> set = new HashSet<String>();
+                set.addAll(Arrays.asList(si.split("")));
+                String sj = s[j];
+                set.addAll(Arrays.asList(sj.split("")));
+                if (set.size() == si.length() + sj.length()) {
+                    max = Math.max(max, si.length() * sj.length());
+                }
+            }
+        }
+        System.out.println(max);
+
+    }
+
+    /**
+     * 56  数大雁
+     */
+    public static void shudayan() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        int max = 0;
+        int Q = 0, U = 0, A = 0, C = 0, K = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == 'q') {
+                Q++;
+            } else if (c == 'u') {
+                U++;
+            } else if (c == 'a') {
+                A++;
+            } else if (c == 'c') {
+                C++;
+            } else if (c == 'k') {
+                K++;
+            } else {
+                System.out.println(-1);
+                return;
+            }
+            if (Q >= U && U >= A && A >= C && C >= K) {
+                max = Math.max(max, Q - K);
+            } else {
+                System.out.println(-1);
+                return;
+            }
+        }
+        System.out.println(max);
+    }
+
+    /**
+     * 55  数字反转打印
+     */
+    public static void shuzifanzhuandayin() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<String> lists = new ArrayList<>();
+        for (int i = 1; i < n + 1; i++) {
+            int fi = firstNum(i);
+            if (i > 1) {
+                for (int j = 0; j < lists.size(); j++) {
+                    lists.set(j, "    " + lists.get(j));
+                }
+            }
+            List<String> list = new ArrayList<>();
+            for (int j = 1; j < i + 1; j++) {
+                if (i % 2 == 0) {
+                    list.add(0, stringRightPad(fi++));
+                } else {
+                    list.add(stringRightPad(fi++));
+                }
+            }
+            String temp = String.join("    ", list);
+            lists.add(temp);
+        }
+        lists.forEach(System.out::println);
+    }
+
+    public static int firstNum(int i) {
+        if (i == 1) return 1;
+        return firstNum(i - 1) + i - 1;
+    }
+
+    public static String stringRightPad(int s) {
+        return stringRightPad(s + "");
+    }
+
+    public static String stringRightPad(String s) {
+        String str = s + "***";
+        return str.substring(0, 4);
+    }
+
+    /**
+     * 54 求符合条件元组个数
+     */
     public static void duoshuzhihe() {
         Scanner sc = new Scanner(System.in);
         List<Integer> list = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
@@ -82,16 +510,6 @@ public class HwOD2023B {
         System.out.println(res.size());
     }
 
-    /**
-     * 54 求符合条件元组个数
-     *
-     * @param list
-     * @param temp
-     * @param target
-     * @param count
-     * @param index
-     * @param res
-     */
     public static void duoshuzhiheBackTracking(List<Integer> list, List<Integer> temp, int target, int count, int index, List<List<Integer>> res) {
         if (temp.size() == count || index == list.size()) {
             int sum = temp.stream().reduce(Integer::sum).get();

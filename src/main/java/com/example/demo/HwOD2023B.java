@@ -52,8 +52,6 @@ public class HwOD2023B {
 //            liushuixian();
 //            redianwangzhantongji();
 //            jianshiqi();
-        }
-        while (true) {
 //            alibbzhaobaoxiang3();
 //            alibbzhaobaoxiang2();
 //            daimaEditor();
@@ -65,67 +63,2118 @@ public class HwOD2023B {
 //            guanyajijun();
 //            VLANziyuanchi();
 //            shuzixulie();
-            duoshuzhihe();
+//            duoshuzhihe();
+//            yijuxingqiugaizao();
+//            zhaozuixiaoshu();
+//            fuwuguzhang();
+//            jieyabaowen();
+//            stringCompare();
+//            zhaodanci();
+//            qujianjiaoji();
+//            shujidiefang();
+//            weareateam();
+//            zuidajiazhikuangdui();
+//            shujuzuijieyuebeifen();
+//            zuichangguangbo();
+//            chazidian();
+//            shuziyouxi();
+//            lanqiubisai();
+//            tiaogezi2();
+//            zhaopin();
+//            zuixiaochuanshushiyan();
+//            caimima();
+//            tiaofangzi2();
+//            zhaoshuzi();
+//            pinglunzhuanhuanshuchu();
+//            zhongshujuli();
+//            guankanyanchu();
+//            tiaogezi();
+//            fenjimu();
+//            tiaogezi1();
+//            caiyangguolv();
+//            renqizuigaodianpu();
+//            shuzhuangjiegou();
+//            zifupipei();
+//            shuzibidaxiao();
+//            erweisan();
+//            erchashubianli();
+        }
+        while (true) {
+//            jisuanzuijiejindeshu();
+//            wanquanerchashu();
+//            zifuchaunfenge();
+//            zhengfangxingshuliang();
+//            chengzuobaomidianti();
+//            bahebisai();
+//            juzhenyuansubianjiezhi();
+//            shengruliwu();
+//            wenjianmuludaxiao();
+//            shuzupaixu();
+//            tiaofangzi1();
+//            neicunziyuanfenpei();
+            zengqiangdeStrStr();
         }
     }
 
 
     //int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+//    List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
 
-    public static void yijuxingqiugaizao() {
+
+////////////////////////////////中阶/////////////////////////////////////////
+
+    /**
+     * 34	二叉树遍历
+     */
+    public static void erchashubianli() {
         Scanner sc = new Scanner(System.in);
-        List<String> lines = new ArrayList<String>();
-        String[][] source = new String[][]{};
-        while (sc.hasNext()) {
-            lines.add(sc.nextLine());
+        String line = sc.nextLine();
+        Deque<TreeNode1> deque = new ArrayDeque<>();
+        TreeNode1 root = new TreeNode1(line.charAt(0) + "");
+        deque.push(root);
+        TreeNode1 parent = root;
+        String status = "";
+        for (int i = 1; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == '{') {
+                status = "l";
+                parent = deque.peek();
+                continue;
+            }
+            if (c == '}') {
+                deque.pop();
+                parent = deque.peek();
+                continue;
+            }
+            if (c == ',') {
+                status = "r";
+                continue;
+            }
+            if (Character.isLetter(c)) {
+                TreeNode1 cur = new TreeNode1(c + "");
+                if (status.equals("l")) {
+                    parent.left = cur;
+                } else {
+                    parent.right = cur;
+                }
+                if (line.charAt(i + 1) == '{') {
+                    deque.push(cur);
+                }
+            }
         }
-        for (int i = 0; i < lines.size(); i++) {
-            source[i] = lines.get(i).split(" ");
+        String res = "";
+        TreeNode1 node = root;
+        Deque<TreeNode1> tree = new ArrayDeque<>();
+        tree.push(node);
+        while (!tree.isEmpty()) {
+            while (node.left != null || node.right != null) {
+                if (node.left != null) {
+                    node = node.left;
+                    tree.push(node);
+//                    }
+                } else {
+                    res += node.val;
+                    tree.pop();
+                    node = node.right;
+                    tree.push(node);
+                }
+            }
+            res += node.val;
+            node = tree.pop();
+            while (node.right == null && !tree.isEmpty()) {
+                node = tree.pop();
+                res += node.val;
+            }
+            if (node.right != null) {
+                node = node.right;
+                tree.push(node);
+            }
         }
-        String[][] temp = Arrays.copyOf(source, source.length);
-        int row = temp.length;
-        int column = temp[0].length;
-        int day = 0;
+
+        System.out.println(res);
+    }
+
+    static class TreeNode1 {
+
+        String val;
+        TreeNode1 left;
+        TreeNode1 right;
+
+
+        public TreeNode1(String val) {
+            this.val = val;
+        }
+
+        public TreeNode1() {
+        }
+    }
+
+    /**
+     * 33	二维伞的雨滴效应
+     */
+    public static void erweisan() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        TreeNode root = new TreeNode(lines[0]);
+        TreeNode gfNode = new TreeNode(-1);//最近的左子树为空的节点
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        deque.push(root);
+        boolean isTree = true;
+        for (int i = 1; i < lines.length; i++) {
+            TreeNode node = deque.peek();
+            TreeNode cur = new TreeNode(lines[i]);
+            while (!deque.isEmpty() && deque.peek().val < cur.val) {
+                node = deque.pop();
+                gfNode = node;
+            }
+            if (node.val > cur.val) {
+                if (gfNode.val > cur.val) {
+                    isTree = false;
+                    break;
+                }
+                node.left = cur;
+            } else {
+                node.right = cur;
+            }
+            deque.push(cur);
+        }
+        if (isTree) {
+            int left = 0;
+            int right = 0;
+            TreeNode node = root;
+            if (node.left != null) {
+                while (node.left != null || node.right != null) {
+                    if (node.left != null) {
+                        node = node.left;
+                    } else {
+                        node = node.right;
+                    }
+                }
+                left = node.val;
+            }
+            node = root;
+            if (node.right != null) {
+                while (node.left != null || node.right != null) {
+                    if (node.right != null) {
+                        node = node.right;
+                    } else {
+                        node = node.left;
+                    }
+                }
+                right = node.val;
+            }
+
+            System.out.println("1 " + left + " " + right);
+        } else {
+            System.out.println("0 0 0");
+        }
+
+    }
+
+
+    static class TreeNode {
+
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+
+        public TreeNode(int val) {
+            this.val = val;
+        }
+
+        public TreeNode() {
+        }
+    }
+
+    /**
+     * 32	数字序列比大小
+     */
+    public static void shuzibidaxiao() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] a = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] b = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int ying = 0;
+        int ping = 0;
+        int ai = 0;
+        for (int i = 0; i < b.length; i++) {
+            for (int j = ai; j < a.length; j++) {
+                if (a[j] > b[i]) {
+                    ying++;
+                    ai = j + 1;
+                    break;
+                } else if (a[j] == b[i]) {
+                    ping++;
+                    ai = j + 1;
+                    break;
+                }
+            }
+        }
+        System.out.println(ying - (num - ying - ping));
+    }
+
+    /**
+     * 31	字符匹配
+     */
+    public static void zifupipei() {
+        Scanner sc = new Scanner(System.in);
+        String[] s = sc.nextLine().split(" ");
+        String match = sc.nextLine();
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < s.length; i++) {
+            if (stringMatch(s[i], match, 0, 0)) {
+                list.add(i + "");
+            }
+        }
+        if (list.size() == 0) {
+            System.out.println("");
+        } else {
+            System.out.println(String.join(",", list));
+        }
+    }
+
+    public static boolean stringMatch(String s, String match, int si, int mi) {
+        for (int i = si, j = mi; i < s.length() && j < match.length(); i++, j++) {
+            char c = s.charAt(i);
+            char m = match.charAt(j);
+            if (Character.isLowerCase(m) && c != m) {
+                return false;
+            } else if (m == '*') {
+                if (j == match.length() - 1) {
+                    return true;
+                }
+                boolean result = false;
+                for (int k = i; k < s.length(); k++) {
+                    if ((match.charAt(j + 1) == '*' || match.charAt(j + 1) == '.' || match.charAt(j + 1) == s.charAt(k)) && stringMatch(s, match, k, j + 1)) {
+                        result = true;
+                        break;
+                    }
+                }
+                return result;
+            }
+            if (i != s.length() - 1 && j == match.length() - 1) {
+                return false;
+            }
+            if (i == s.length() - 1) {
+                for (int k = j + 1; k < match.length(); k++) {
+                    if (match.charAt(k) != '*') {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 30	树状结构查询
+     */
+    public static void shuzhuangjiegou() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        List<String[]> list = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+        for (int i = 0; i < num; i++) {
+            String[] s = sc.nextLine().split(" ");
+            list.add(s);
+            List<String> list1 = map.get(s[1]);
+            if (list1 != null) {
+                list1.add(s[0]);
+            } else {
+                list1 = new ArrayList<>();
+                list1.add(s[0]);
+            }
+            map.put(s[1], list1);
+        }
+        String c = sc.nextLine();
+        List<String> list2 = new ArrayList<>();
+        shujiegouBack(map, c, list2);
+        Collections.sort(list2);
+        list2.forEach(System.out::println);
+    }
+
+    public static void shujiegouBack(Map<String, List<String>> map, String c, List<String> list) {
+        List<String> list1 = map.get(c);
+        if (list1 != null) {
+            list.addAll(new ArrayList<>(list1));
+            for (int i = 0; i < list1.size(); i++) {
+                shujiegouBack(map, list1.get(i), list);
+            }
+        }
+    }
+
+    /**
+     * 29	人气最高的店铺
+     */
+    public static void renqizuigaodianpu() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int n = lines[0];
+        int m = lines[1];
+        List<int[]> list = new ArrayList<int[]>();
+        for (int i = 0; i < n; i++) {
+            int[] temp = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+            list.add(temp);
+        }
+        butie = Integer.MAX_VALUE;
+        dianpulapiao(list, 0, new ArrayList<>());
+        System.out.println(butie);
+    }
+
+    static int butie = Integer.MAX_VALUE;
+
+    public static void dianpulapiao(List<int[]> list, int index, List<int[]> temp) {
+        if (index == list.size() || isMost(list, temp)) {
+            if (isMost(list, temp)) {
+                int sum = temp.stream().map(a -> a[1]).mapToInt(Integer::valueOf).sum();
+                butie = Math.min(butie, sum);
+            }
+        } else {
+            for (int i = index; i < list.size(); i++) {
+                temp.add(list.get(i));
+                dianpulapiao(list, ++index, temp);
+                temp.remove(list.get(i));
+            }
+        }
+    }
+
+    public static boolean isMost(List<int[]> list, List<int[]> temp) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < list.size(); i++) {
+            if (!temp.contains(list.get(i))) {
+                map.put(list.get(i)[0], map.getOrDefault(list.get(i)[0], 0) + 1);
+            } else {
+                map.put(1, map.getOrDefault(1, 0) + 1);
+            }
+        }
+        List<Map.Entry<Integer, Integer>> collect = map.entrySet().stream().sorted((a, b) -> {
+            if (b.getValue() == a.getValue()) {
+                return b.getKey() - a.getKey();
+            }
+            return b.getValue() - a.getValue();
+        }).collect(Collectors.toList());
+        if (collect.get(0).getKey() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 28	采样过滤
+     */
+    public static void caiyangguolv() {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int t = sc.nextInt();
+        int p = sc.nextInt();
+        sc.nextLine();
+        int[] S = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int count = 0;
+        List<Integer> errors = new ArrayList<Integer>();
+        boolean guzhang = false;
+        int huifu = 0;
+        for (int i = 0, l = Integer.MAX_VALUE; i < S.length; i++) {
+            if (i == S.length - 1 && !guzhang) {
+                count = Math.max(count, i - l + 1);
+            }
+            if (l == Integer.MAX_VALUE && !guzhang) {
+                if (S[i] >= 0) {
+                    l = i;
+                }
+                continue;
+            }
+            if (S[i] <= 0 || S[i] < S[i - 1] || S[i] - S[i - 1] >= 10) {
+                errors.add(i);
+                S[i] = S[i - 1];
+                huifu = 0;
+            } else {
+                if (guzhang) {
+                    huifu++;
+                    if (huifu == p) {
+                        guzhang = false;
+                        huifu = 0;
+                        l = i;
+                    }
+                }
+            }
+            if (errors.size() >= t) {
+                if (i - errors.get(0) + 1 <= m) {
+                    count = Math.max(count, errors.get(t - 1) - l);
+                    l = Integer.MAX_VALUE;
+                    guzhang = true;
+                }
+                errors.remove(0);
+            }
+        }
+        System.out.println(count);
+    }
+
+    /**
+     * 27	跳格子
+     */
+    public static void tiaogezi1() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] res = new int[lines.length];
+        for (int i = 0; i < lines.length; i++) {
+            if (i == 0) {
+                res[i] = lines[i];
+                continue;
+            }
+            if (i == 1) {
+                res[i] = Math.max(lines[i], res[i - 1]);
+                continue;
+            }
+            res[i] = Math.max(lines[i] + res[i - 2], res[i - 1]);
+        }
+        System.out.println(res[res.length - 1]);
+    }
+
+    /**
+     * 26	分积木
+     */
+    public static void fenjimu() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int first = lines[0];
+        for (int i = 1; i < lines.length; i++) {
+            first = first ^ lines[i];
+        }
+        if (first == 0) {
+            System.out.println(Arrays.stream(lines).sum() - Arrays.stream(lines).min().getAsInt());
+        } else {
+            System.out.println("NO");
+        }
+    }
+
+    /**
+     * 25	跳格子游戏
+     */
+    public static void tiaogezi() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        List<int[]> list = new ArrayList<int[]>();
+        while (!sc.hasNext("s")) {
+            int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            list.add(lines);
+        }
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < num; i++) {
+            boolean kaiqi = true;
+            for (int j = 0; j < list.size(); j++) {
+                int[] temp = list.get(j);
+                if (temp[1] == i) {
+                    kaiqi = false;
+                }
+            }
+            if (kaiqi) {
+                set.add(i);
+            }
+        }
         boolean found = true;
         while (found) {
             found = false;
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < column; j++) {
-                    if (source[i][j] == "YES") {
-                        if (xingqiugaizao(temp, i, j)) {
-                            found = true;
+            int number = set.size();
+            for (int i = 0; i < num; i++) {
+                if (set.contains(i)) continue;
+                for (int j = 0; j < list.size(); j++) {
+                    int[] temp = list.get(j);
+                    if (temp[1] == i && set.contains(temp[0])) {
+                        set.add(temp[1]);
+                        break;
+                    }
+                }
+            }
+            if (set.size() == num) {
+                System.out.println("yes");
+                return;
+            }
+            if (set.size() > number) {
+                found = true;
+            }
+        }
+        System.out.println("no");
+    }
+
+    /**
+     * 24	观看文艺汇演问题
+     */
+    public static void guankanyanchu() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        sc.nextLine();
+        List<int[]> list = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            lines[1] += lines[0];
+            list.add(lines);
+        }
+        Collections.sort(list, (a, b) -> {
+            if (a[0] == b[0]) {
+                return a[1] - b[1];
+            }
+            return a[0] - b[0];
+        });
+        int[] res = new int[list.size()];
+        res[0] = 1;
+        int end = list.get(0)[1];
+        for (int i = 1; i < list.size(); i++) {
+            int right = list.get(i)[0];
+            if (end + 15 <= right) {
+                res[i] = res[i - 1] + 1;
+                end = right;
+            } else {
+                res[i] = res[i - 1];
+                end = Math.min(end, right);
+            }
+        }
+        System.out.println(res[num - 1]);
+    }
+
+    /**
+     * 23	【满分】最佳植树距离
+     */
+    public static void zhongshujuli() {
+        Scanner sc = new Scanner(System.in);
+//        7
+//        1 5 3 6 10 8 13
+//        3
+        int len = sc.nextInt();
+        sc.nextLine();
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(lines);
+        int num = sc.nextInt();
+        int left = 1;
+        int answer = 0;
+        int right = lines[len - 1] - lines[0];
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            int count = 1;
+            int pre = lines[0];
+            for (int i = 1; i < len; i++) {
+                if (lines[i] - pre >= mid) {//超过前一棵树的间距在种下一颗
+                    count++;
+                    if (count == num) {
+                        answer = mid;
+                        left = mid + 1;
+                        break;
+                    }
+                    pre = lines[i];
+                }
+            }
+            if (count < num) {
+                right = mid - 1;
+            }
+        }
+        System.out.println(answer);
+    }
+
+    /**
+     * 22	评论转换输出
+     */
+    public static void pinglunzhuanhuanshuchu() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(",");
+        List<Content> list = new ArrayList<Content>();
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        for (int i = 0; i < lines.length; i += 2) {
+            String con = lines[i];
+            int num = Integer.parseInt(lines[i + 1]);
+            int row = 1;
+            if (list.size() > 0) {  //如果list不为空，则最后一个就是他的父级
+                Content last = list.get(list.size() - 1);
+                row = last.row + 1;
+                last.num--;
+                if (last.num == 0) {
+                    list.remove(last);
+                }
+            }
+
+            if (num > 0) {  //只需要加入有子集的对象
+                Content content = new Content();
+                content.row = row;
+                content.cont = con;
+                content.num = num;
+                list.add(content);
+            }
+
+            map.put(row, map.getOrDefault(row, "") + con + " ");
+        }
+        System.out.println(map.size());
+        map.forEach((a, b) -> {
+            System.out.println(b);
+        });
+    }
+
+    static class Content {
+        int row;
+        String cont;
+        int num;
+    }
+
+    /**
+     * 21	找出两个整数数组中同时出现的
+     */
+    public static void zhaoshuzi() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int[] lines2 = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map2 = new HashMap<>();
+        Map<Integer, Integer> res = new HashMap<>();
+        for (int i : lines) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        for (int i : lines2) {
+            map2.put(i, map2.getOrDefault(i, 0) + 1);
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int key = entry.getKey();
+            if (map2.containsKey(key)) {
+                res.put(key, Math.min(entry.getValue(), map2.get(key)));
+            }
+        }
+        if (res.isEmpty()) {
+            System.out.println("NULL");
+            return;
+        }
+        List<Map.Entry<Integer, Integer>> list = res.entrySet().stream().sorted((a, b) -> {
+            if (a.getValue() == b.getValue()) {
+                return a.getKey() - b.getKey();
+            }
+            return a.getValue() - b.getValue();
+        }).collect(Collectors.toList());
+        int v = 0;
+        String s = "";
+        for (Map.Entry<Integer, Integer> entry : list) {
+            if (v == 0) {
+                v = entry.getValue();
+                s = v + ":" + entry.getKey();
+                continue;
+            }
+            if (entry.getValue() != v) {
+                System.out.println(s);
+                v = entry.getValue();
+                s = v + ":" + entry.getKey();
+            } else {
+                s += "," + entry.getKey();
+            }
+        }
+        System.out.println(s);
+    }
+
+    /**
+     * 20	跳房子II
+     */
+    public static void tiaofangzi2() {
+        Scanner sc = new Scanner(System.in);
+        List<Integer> lines = Arrays.stream(sc.nextLine().replace("[", "").replace("]", "").split(",")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int n = sc.nextInt();
+        List<Integer> result = new ArrayList<Integer>();
+        tiaofangzi2IndexSum = Integer.MAX_VALUE;
+        tiaofangzi2Back(lines, 0, 0, new ArrayList<>(), result, n);
+        System.out.println(result.toString());
+    }
+
+    static int tiaofangzi2IndexSum = Integer.MAX_VALUE;
+
+    public static void tiaofangzi2Back(List<Integer> lines, int index, int iSum, List<Integer> values, List<Integer> res, int n) {
+        if (index >= lines.size() || values.size() == 3) {
+            if (values.size() == 3) {
+                int sum = values.stream().reduce(Integer::sum).get();
+                if (sum == n) {
+                    if (iSum < tiaofangzi2IndexSum) {
+                        for (int i = 0; i < values.size(); i++) {
+                            res.add(values.get(i));
+                        }
+                        tiaofangzi2IndexSum = iSum;
+                    }
+                }
+            }
+        } else {
+            for (int i = index; i < lines.size(); i++) {
+                values.add(lines.get(i));
+                iSum += i;
+                tiaofangzi2Back(lines, ++index, iSum, values, res, n);
+                values.remove(lines.get(i));
+                iSum -= i;
+            }
+        }
+
+    }
+
+    /**
+     * 19	猜密码
+     */
+    public static void caimima() {
+        Scanner sc = new Scanner(System.in);
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int n = sc.nextInt();
+        Collections.sort(lines);
+        List<String> res = new ArrayList<String>();
+        caimimaBackTracking(lines, 0, res, new ArrayList<String>(), n);
+        Collections.sort(res);
+        res.forEach(System.out::println);
+    }
+
+    public static void caimimaBackTracking(List<Integer> lines, int index, List<String> res, List<String> temp, int len) {
+        if (index == lines.size()) {
+            if (temp.size() >= len) {
+                res.add(String.join(",", temp));
+            }
+        } else {
+            if (temp.size() >= len) {
+                res.add(String.join(",", temp));
+            }
+            for (int i = index; i < lines.size(); i++) {
+                temp.add(lines.get(i) + "");
+                caimimaBackTracking(lines, ++index, res, temp, len);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+
+    /**
+     * 18	最小传输时延
+     */
+    public static void zuixiaochuanshushiyan() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        sc.nextLine();
+        List<int[]> lines = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            lines.add(new int[]{sc.nextInt(), sc.nextInt(), sc.nextInt()});
+        }
+        int fs = sc.nextInt();
+        int end = sc.nextInt();
+        int count = 0;
+        List<Integer> res = new ArrayList<>();
+        guangboBack(lines, count, res, fs, end);
+        int min = res.stream().reduce(Integer::min).get();
+        System.out.println(min);
+    }
+
+
+    public static void guangboBack(List<int[]> lines, int count, List<Integer> res, int fs, int end) {
+        if (fs == end) {
+            res.add(count);
+        } else {
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i)[0] == fs) {
+                    count += lines.get(i)[2];
+                    guangboBack(lines, count, res, lines.get(i)[1], end);
+                    count -= lines.get(i)[2];
+                }
+            }
+        }
+    }
+
+    /**
+     * 17	招聘
+     */
+    public static void zhaopin() {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        List<int[]> lines = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            lines.add(new int[]{sc.nextInt(), sc.nextInt()});
+        }
+        List<List<int[]>> list = new ArrayList<>();
+        Collections.sort(lines, (a, b) -> {
+            if (a[0] == b[0]) {
+                return a[1] - b[1];
+            }
+            return a[0] - b[0];
+        });
+        for (int i = 0; i < n; i++) {
+            int start = lines.get(i)[0];
+            boolean found = false;
+            for (List<int[]> msg : list) {
+                if (msg.size() == m) {
+                    continue;
+                }
+                if (msg.get(msg.size() - 1)[1] <= start) {
+                    msg.add(lines.get(i));
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                List<int[]> temp = new ArrayList<int[]>();
+                temp.add(lines.get((i)));
+                list.add(temp);
+            }
+        }
+        System.out.println(list.size());
+    }
+
+    /**
+     * 16	跳格子2  动态规划
+     */
+    public static void tiaogezi2() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] lines1 = new int[lines.length - 1];
+        int[] lines2 = new int[lines.length - 1];
+        System.arraycopy(lines, 0, lines1, 0, lines.length - 1);
+        System.arraycopy(lines, 1, lines2, 0, lines.length - 1);
+        System.out.println(Math.max(tiaogezi2Handler(lines1), tiaogezi2Handler(lines2)));
+    }
+
+    public static int tiaogezi2Handler(int[] lines) {
+        int[] dp = new int[lines.length];
+        dp[0] = lines[0];
+        for (int i = 1; i < lines.length; i++) {
+            if (i == 1) {
+                dp[i] = Math.max(dp[i - 1], lines[i]);
+            } else {
+                dp[i] = Math.max(dp[i - 1], lines[i] + dp[i - 2]);
+            }
+        }
+        return dp[lines.length - 1];
+    }
+
+    /**
+     * 15	【满分】篮球比赛
+     */
+    public static void lanqiubisai() {
+        Scanner sc = new Scanner(System.in);
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int sum = lines.stream().reduce(Integer::sum).get();
+        int mid = sum / 2;
+        zuixiaozhanlicha = Integer.MAX_VALUE;
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        lanqiubisaiBack(lines, new ArrayList<>(), 0, mid, res, sum == mid * 2);
+        int resSum = res.get(0).stream().reduce(Integer::sum).get();
+        System.out.println(Math.abs(sum - resSum * 2));
+    }
+
+    static int zuixiaozhanlicha = Integer.MAX_VALUE;
+
+    public static void lanqiubisaiBack(List<Integer> list, List<Integer> temp, int index, int mid, List<List<Integer>> res, boolean isOushu) {
+        if (index >= list.size() || temp.size() == 5) {
+            if (temp.size() == 5) {
+                int tempSum = temp.stream().reduce(Integer::sum).get();
+                if (isOushu) {
+                    if (Math.abs(tempSum - mid) < zuixiaozhanlicha) {
+                        zuixiaozhanlicha = Math.abs(tempSum - mid);
+                        res.clear();
+                        res.add(new ArrayList<>(temp));
+                    }
+                } else {
+                    if (Math.abs(tempSum - mid) <= zuixiaozhanlicha) {
+                        if (Math.abs(tempSum - mid) < zuixiaozhanlicha) {
+                            zuixiaozhanlicha = Math.abs(tempSum - mid);
+                            res.clear();
+                            res.add(new ArrayList<>(temp));
+                        } else {
+                            if (tempSum > mid) {
+                                zuixiaozhanlicha = Math.abs(tempSum - mid);
+                                res.clear();
+                                res.add(new ArrayList<>(temp));
+                            }
                         }
                     }
                 }
             }
-            day++;
-            source = Arrays.copyOf(temp, source.length);
+        } else {
+            for (int i = index; i < list.size(); i++) {
+                temp.add(list.get(i));
+                lanqiubisaiBack(list, temp, ++index, mid, res, isOushu);
+                temp.remove(list.get(i));
+            }
         }
     }
 
-    public static boolean xingqiugaizao(String[][] temp, int i, int j) {
+    /**
+     * 14	【满分】数字游戏
+     */
+    public static void shuziyouxi() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            sc.nextLine();
+            boolean found = false;
+            int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            for (int i = 0; i < n; i++) {
+                int sum = 0;
+                for (int j = i; j < n; j++) {
+                    sum += lines[j];
+                    if (sum % m == 0) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    System.out.println(1);
+                    break;
+                }
+            }
+            if (!found) {
+                System.out.println(0);
+            }
+        }
+    }
+
+    /**
+     * 13	【满分】查字典
+     */
+    public static void chazidian() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().split(" ");
+        String f = lines[0];
         boolean found = false;
-        if (i > 0 && temp[i - 1][j].equals("NO")) {
-            temp[i - 1][j] = "YES";
-            found = true;
+        for (int i = 2; i < lines.length; i++) {
+            if (lines[i].indexOf(f) == 0) {
+                found = true;
+                System.out.println(lines[i]);
+            }
         }
-        if (i < temp.length && temp[i + 1][j].equals("NO")) {
-            temp[i + 1][j] = "YES";
-            found = true;
+        if (!found) {
+            System.out.println(-1);
         }
-        if (j > 0 && temp[i][j - 1].equals("NO")) {
-            temp[i][j - 1] = "YES";
-            found = true;
+    }
+
+    /**
+     * 12	最长广播响应
+     */
+    public static void zuichangguangbo() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        Set<Integer> set = new HashSet<Integer>();
+        Set<Integer> temp = new HashSet<Integer>();
+        sc.nextLine();
+        List<List<Integer>> lines = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            List<Integer> line = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+            lines.add(line);
         }
-        if (j < temp[0].length && temp[i][j + 1].equals("NO")) {
-            temp[i][j + 1] = "YES";
-            found = true;
+        int first = sc.nextInt();
+        int count = 0;
+        set.add(first);
+        temp.add(first);
+        while (true) {
+            set.forEach(a -> {
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).contains(a)) {
+                        temp.addAll(lines.get(i));
+                    }
+                }
+            });
+            count++;
+            if (temp.size() == n) {
+                break;
+            }
+            set.addAll(temp);
         }
-        return found;
+        System.out.println(count * 2);
+    }
+
+    /**
+     * 11	【满分】数据最节约的备份方法
+     */
+    public static void shujuzuijieyuebeifen() {
+        Scanner sc = new Scanner(System.in);
+        int max = 500;
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int count = 0;
+        Collections.sort(lines, (a, b) -> b - a);
+        while (lines.size() > 0) {
+            int sum = 0;
+            for (int i = 0; i < lines.size(); i++) {
+                if (sum + lines.get(i) <= max) {
+                    sum += lines.get(i);
+                    lines.remove(i);
+                    i--;
+                }
+            }
+            count++;
+        }
+        System.out.println(count);
+    }
+
+    /**
+     * 10	【满分】寻找最大价值的矿堆
+     */
+    public static void zuidajiazhikuangdui() {
+        Scanner sc = new Scanner(System.in);
+        List<int[]> list = new ArrayList<>();
+        while (!sc.hasNext("s")) {
+            int[] lines = Arrays.stream(sc.nextLine().split("")).mapToInt(Integer::parseInt).toArray();
+            list.add(lines);
+        }
+        int jiazhi = 0;
+        int max = 0;
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list.get(0).length; j++) {
+                int n = list.get(i)[j];
+                List<Integer> temp = new ArrayList<>();
+                if (n != 0) {
+                    temp.add(n);
+                    list.get(i)[j] = 0;
+                    kuangchanjiazhi(list, i, j, temp);
+                    jiazhi = temp.stream().reduce(Integer::sum).get();
+                    max = Math.max(max, jiazhi);
+                }
+            }
+        }
+        System.out.println(max);
+    }
+
+    public static void kuangchanjiazhi(List<int[]> list, int x, int y, List<Integer> temp) {
+        if (x > 0 && list.get(x - 1)[y] != 0) {
+            temp.add(list.get(x - 1)[y]);
+            list.get(x - 1)[y] = 0;
+            kuangchanjiazhi(list, x - 1, y, temp);
+        }
+        if (x < list.size() - 1 && list.get(x + 1)[y] != 0) {
+            temp.add(list.get(x + 1)[y]);
+            list.get(x + 1)[y] = 0;
+            kuangchanjiazhi(list, x + 1, y, temp);
+        }
+        if (y > 0 && list.get(x)[y - 1] != 0) {
+            temp.add(list.get(x)[y - 1]);
+            list.get(x)[y - 1] = 0;
+            kuangchanjiazhi(list, x, y - 1, temp);
+        }
+        if (y < list.get(0).length - 1 && list.get(x)[y + 1] != 0) {
+            temp.add(list.get(x)[y + 1]);
+            list.get(x)[y + 1] = 0;
+            kuangchanjiazhi(list, x, y + 1, temp);
+        }
+    }
+
+    /**
+     * 9	We Are A Team
+     */
+    public static void weareateam() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int n = lines[0];
+        int m = lines[1];
+        if (n < 1 || m < 1 || n > 100000 || m > 100000) {
+            System.out.println("NULL");
+            return;
+        }
+        List<Set<Integer>> list = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            int[] linei = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            int a = linei[0];
+            int b = linei[1];
+            int c = linei[2];
+            if (c != 0 && c != 1 || (a < 1 || b < 1 || a > n || b > n)) {
+                System.out.println("da pian zi");
+            } else {
+                if (c == 0) {
+                    boolean found = false;
+                    for (int j = 0; j < list.size(); j++) {
+                        if (list.get(j).contains(a) || list.get(j).contains(b)) {
+                            list.get(j).add(a);
+                            list.get(j).add(b);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        list.add(new HashSet<Integer>() {{
+                            add(a);
+                            add(b);
+                        }});
+                    }
+                } else {
+                    boolean found = false;
+                    for (int j = 0; j < list.size(); j++) {
+                        if (list.get(j).contains(a) && list.get(j).contains(b)) {
+                            found = true;
+                            System.out.println("we are a team");
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("we are not a team");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 8	书籍叠放
+     */
+    public static void shujidiefang() {
+        Scanner sc = new Scanner(System.in);
+        String[] lines = sc.nextLine().replace("[[", "").replace("]]", "").split("],\\[");
+        List<int[]> list = new ArrayList<>();
+        for (int i = 0; i < lines.length; i++) {
+            list.add(new int[]{Integer.parseInt(lines[i].split(",")[0]), Integer.parseInt(lines[i].split(",")[1])});
+        }
+        Collections.sort(list, (a, b) -> {
+            if (a[0] == b[0]) {
+                return b[1] - a[1];
+            }
+            return b[0] - a[0];
+        });
+        int count = 0;
+        int max = 0;
+        for (int i = 0; i < list.size() - max; i++) {
+            int pl = list.get(i)[0];
+            int pw = list.get(i)[1];
+            for (int j = i + 1; j < list.size(); j++) {
+                int cl = list.get(j)[0];
+                int cw = list.get(j)[1];
+                if (pl > cl && pw > cw) {
+                    pl = cl;
+                    pw = cw;
+                    count++;
+                }
+            }
+            max = Math.max(max, count);
+        }
+        System.out.println(max);
+    }
+
+
+    /**
+     * 7	区间交集
+     */
+    public static void qujianjiaoji() {
+        Scanner sc = new Scanner(System.in);
+        List<int[]> list = new ArrayList<>();
+        List<int[]> jiaoji = new ArrayList<>();
+        while (!sc.hasNext("100")) {
+            String[] line = sc.nextLine().split(" ");
+            list.add(new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1])});
+        }
+        Collections.sort(list, (a, b) -> {
+            return a[0] - b[0];
+        });
+        for (int i = 0; i < list.size(); i++) {
+            int[] ai = list.get(i);
+            for (int j = i + 1; j < list.size(); j++) {
+                int[] aj = list.get(j);
+                if (ai[1] >= aj[0]) {
+                    if (ai[1] >= aj[1]) {
+                        jiaoji.add(aj);
+                    } else {
+                        jiaoji.add(new int[]{aj[0], ai[1]});
+                    }
+                }
+            }
+        }
+        if (jiaoji.size() == 0) {
+            System.out.println("None");
+            return;
+        }
+        Collections.sort(jiaoji, (a, b) -> {
+            return a[0] - b[0];
+        });
+        int index = 0;
+        int[] first = jiaoji.get(index);
+        for (int i = 1; i < jiaoji.size(); i++) {
+            int[] cur = jiaoji.get(i);
+            if (first[1] >= cur[0]) {
+                if (first[1] >= cur[1]) {
+                    jiaoji.remove(cur);
+                    i--;
+                } else {
+                    cur = new int[]{first[0], cur[1]};
+                    jiaoji.set(i, cur);
+                    jiaoji.remove(index);
+                    i--;
+                    index = i;
+                    first = cur;
+                }
+            }
+        }
+        jiaoji.forEach(e -> {
+            for (int i = 0; i < e.length; i++) {
+                System.out.print(e[i] + " ");
+            }
+            System.out.println();
+        });
+    }
+
+    /**
+     * 6	找单词
+     */
+    public static void zhaodanci() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        String[][] strs = new String[n][];
+        for (int i = 0; i < n; i++) {
+            String[] line = sc.nextLine().split(",");
+            strs[i] = line;
+        }
+        String word = sc.nextLine();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < strs.length; i++) {
+            for (int j = 0; j < strs.length; j++) {
+                if (strs[i][j].equals(word.charAt(0) + "")) {
+                    strs[i][j] = "";
+                    list.add(i + "," + j);
+                    if (zhandanciBack(strs, list, word, 0, 0, 0)) {
+                        System.out.println(String.join(",", list));
+                        return;
+                    }
+                    strs[i][j] = word.charAt(0) + "";
+                    list.remove(list.size() - 1);
+                }
+            }
+        }
+        System.out.println("N");
+    }
+
+    public static boolean zhandanciBack(String[][] strs, List<String> list, String word, int i, int x, int y) {
+        if (i == word.length() - 1) {
+            return true;
+        } else {
+            i++;
+            String s = word.charAt(i) + "";
+            if (x > 0 && strs[x - 1][y].equals(s)) {
+                list.add(x - 1 + "," + y);
+                strs[x - 1][y] = "";
+                if (zhandanciBack(strs, list, word, i, x - 1, y)) {
+                    return true;
+                } else {
+                    list.remove(list.size() - 1);
+                    strs[x - 1][y] = s;
+                }
+            }
+            if (y > 0 && strs[x][y - 1].equals(s)) {
+                list.add(x + "," + (y - 1));
+                strs[x][y - 1] = "";
+                if (zhandanciBack(strs, list, word, i, x, y - 1)) {
+                    return true;
+                } else {
+                    list.remove(list.size() - 1);
+                    strs[x][y - 1] = s;
+                }
+            }
+            if (x < strs.length - 1 && strs[x + 1][y].equals(s)) {
+                list.add(x + 1 + "," + y);
+                strs[x + 1][y] = "";
+                if (zhandanciBack(strs, list, word, i, x + 1, y)) {
+                    return true;
+                } else {
+                    list.remove(list.size() - 1);
+                    strs[x + 1][y] = s;
+                }
+            }
+            if (y < strs.length - 1 && strs[x][y + 1].equals(s)) {
+                list.add(x + "," + (y + 1));
+                strs[x][y + 1] = "";
+                if (zhandanciBack(strs, list, word, i, x, y + 1)) {
+                    return true;
+                } else {
+                    list.remove(list.size() - 1);
+                    strs[x][y + 1] = s;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 5	字符串比较
+     */
+    public static void stringCompare() {
+        Scanner sc = new Scanner(System.in);
+        String s1 = sc.nextLine();
+        String s2 = sc.nextLine();
+        int num = sc.nextInt();
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = 0; i < s1.length(); i++) {
+            char c1 = s1.charAt(i);
+            char c2 = s2.charAt(i);
+            list.add(Math.abs(c1 - c2));
+        }
+        int max = 1;
+        for (int i = 0; i < list.size(); i++) {
+            int c = list.get(i);
+            if (c > num) continue;
+            int sum = c;
+            int temp = 1;
+            for (int j = i + 1; j < list.size(); j++) {
+                int c1 = list.get(j);
+                sum += c1;
+                if (num < sum) {
+                    max = Math.max(max, temp);
+                    break;
+                } else {
+                    temp++;
+                }
+            }
+            max = Math.max(max, temp);
+        }
+        System.out.println(max);
+    }
+
+    /**
+     * 4	解压报文
+     */
+    public static void jieyabaowen() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        Deque<Integer> integers = new ArrayDeque<>();
+        Deque<StringBuffer> stringBuffers = new ArrayDeque<>();
+        StringBuffer strs = new StringBuffer();
+        String ints = "";
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                if (strs.length() > 0) {
+                    stringBuffers.push(strs);
+                    strs = new StringBuffer();
+                }
+                ints += c;
+            } else if (c == '[') {
+                integers.push(Integer.parseInt(ints));
+                ints = "";
+            } else if (c == ']') {
+                int num = integers.pop();
+                if (strs.length() > 0) {
+                    stringBuffers.push(strs);
+                    strs = new StringBuffer();
+                }
+                String strP = stringBuffers.pop().toString();
+                for (int j = 0; j < num; j++) {
+                    strs.append(strP);
+                }
+                if (stringBuffers.isEmpty()) {
+                    stringBuffers.push(strs);
+                } else {
+                    stringBuffers.push(stringBuffers.pop().append(strs));
+                }
+                strs = new StringBuffer();
+            } else {
+                strs.append(c);
+            }
+        }
+        System.out.println(stringBuffers.pop());
+    }
+
+    /**
+     * 3	服务失效判断
+     */
+    public static void fuwuguzhang() {
+        Scanner sc = new Scanner(System.in);
+        String lines = sc.nextLine();
+        Set<String> errors = Arrays.stream(sc.nextLine().split(",")).collect(Collectors.toSet());
+        List<String> fuwus = Arrays.stream(lines.split(",")).collect(Collectors.toList());
+        boolean found = true;
+        while (found) {
+            found = false;
+            Set<String> temp = new HashSet<>();
+            for (int i = 0; i < fuwus.size(); i++) {
+                String s = fuwus.get(i);
+                errors.forEach(e -> {
+                    if (s.contains("-" + e)) {
+                        temp.add(s.split("-")[0]);
+                    }
+                });
+            }
+            int len = errors.size();
+            errors.addAll(temp);
+            if (errors.size() > len) {
+                found = true;
+            }
+        }
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < fuwus.size(); i++) {
+            String a = fuwus.get(i).split("-")[0];
+            String b = fuwus.get(i).split("-")[1];
+            if (!errors.contains(a)) {
+                res.add(a);
+            }
+            if (!errors.contains(b)) {
+                res.add(b);
+            }
+        }
+        System.out.println(res.size() == 0 ? "," : String.join(",", res));
+    }
+
+    /**
+     * 2	找最小数
+     */
+    public static void zhaozuixiaoshu() {
+        Scanner sc = new Scanner(System.in);
+        String[] num1 = sc.nextLine().split("");
+        int n = sc.nextInt();
+        List<Integer> list = new ArrayList<Integer>();
+        zhaozuixiaoshuBackTracking(list, num1, 0, new ArrayList<String>(), num1.length - n);
+        Collections.sort(list);
+        System.out.println(list.get(0));
+    }
+
+    public static void zhaozuixiaoshuBackTracking(List<Integer> list, String[] num1, int index, List<String> temp, int n) {
+        if (temp.size() == n || index > num1.length) {
+            if (temp.size() == n) {
+                int m = Integer.parseInt(String.join("", temp));
+                list.add(m);
+            }
+        } else {
+            for (int i = index; i < num1.length; i++) {
+                temp.add(num1[i]);
+                zhaozuixiaoshuBackTracking(list, num1, ++index, temp, n);
+                temp.remove(num1[i]);
+            }
+        }
+    }
+
+    /**
+     * 1	宜居星球改造计划
+     */
+    public static void yijuxingqiugaizao() {
+        Scanner sc = new Scanner(System.in);
+        List<String> lines = new ArrayList<String>();
+        while (!sc.hasNext("1")) {
+            lines.add(sc.nextLine());
+        }
+        String[][] source = new String[lines.size()][];
+        int count = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            source[i] = lines.get(i).split(" ");
+            for (int j = 0; j < source[i].length; j++) {
+                if (source[i][j].equals("NO")) {
+                    count++;
+                }
+            }
+        }
+        int row = source.length;
+        int column = source[0].length;
+        int day = 0;
+        boolean found = true;
+        while (found) {
+            found = false;
+            Set<String> list = new HashSet<>();
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    if (source[i][j].equals("YES")) {
+                        xingqiugaizao(source, i, j, list);
+                    }
+                }
+            }
+            day++;
+            if (list.size() > 0) {
+                count -= list.size();
+                list.forEach(a -> {
+                    source[Integer.parseInt(a.split(",")[0])][Integer.parseInt(a.split(",")[1])] = "YES";
+                });
+                found = true;
+            }
+        }
+        if (count == 0) {
+            System.out.println(day - 1);
+        } else {
+            System.out.println(-1);
+        }
+    }
+
+    public static void xingqiugaizao(String[][] source, int i, int j, Set<String> list) {
+        if (i > 0 && source[i - 1][j].equals("NO")) {
+            list.add(i - 1 + "," + j);
+        }
+        if (i < source.length - 1 && source[i + 1][j].equals("NO")) {
+            list.add(i + 1 + "," + j);
+        }
+        if (j > 0 && source[i][j - 1].equals("NO")) {
+            list.add(i + "," + (j - 1));
+        }
+        if (j < source[0].length - 1 && source[i][j + 1].equals("NO")) {
+            list.add(i + "," + (j + 1));
+        }
     }
 
 
 ////////////////////////////////////////初阶////////////////////////////////////////
+
+    /**
+     * 78	增强的strstr
+     */
+    public static void zengqiangdeStrStr() {
+        Scanner sc = new Scanner(System.in);
+        String s1 = sc.nextLine();
+        String s2 = sc.nextLine();
+        boolean isKuoHao = false;
+        boolean isMatch = false;
+        String temp = "";
+        int index = 0;
+        for (int i = 0; i < s1.length(); i++) {
+            if (isMatch) break;
+            index = i;
+            for (int j = 0; j < s2.length(); j++) {
+                char c1 = s1.charAt(i);
+                char c2 = s2.charAt(j);
+                if (c2 == '[' || c2 == ']') {
+                    isKuoHao = !isKuoHao;
+                    if (!temp.equals("")) {
+                        if (temp.contains(c1 + "")) {
+                            i++;
+                            temp = "";
+                            if (j == s2.length() - 1) {
+                                isMatch = true;
+                                break;
+                            }
+                            continue;
+                        } else {
+                            i = index;
+                            break;
+                        }
+                    }
+
+                    continue;
+                }
+                if (isKuoHao) {
+                    temp += c2;
+                    continue;
+                }
+                if (Character.isLetter(c2)) {
+                    if (c1 == c2) {
+                        if (j == s2.length() - 1) {
+                            isMatch = true;
+                            break;
+                        }
+                        i++;
+                    } else {
+                        i = index;
+                        break;
+                    }
+                }
+            }
+
+        }
+        System.out.println(index);
+    }
+
+    /**
+     * 77	内存资源分配
+     */
+    public static void neicunziyuanfenpei() {
+        Scanner sc = new Scanner(System.in);
+        String[] s1 = sc.nextLine().split(",");
+        int[] lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < s1.length; i++) {
+            map.put(Integer.parseInt(s1[i].split(":")[0]), Integer.parseInt(s1[i].split(":")[1]));
+        }
+        List<Map.Entry<Integer, Integer>> collect = map.entrySet().stream().sorted((a, b) -> {
+            return a.getKey() - b.getKey();
+        }).collect(Collectors.toList());
+        Boolean[] res = new Boolean[lines.length];
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < collect.size(); j++) {
+                if (collect.get(j).getKey() > lines[i]) {
+                    res[i] = true;
+                    if (collect.get(j).getValue() == 1) {
+                        collect.remove(j);
+                        break;
+                    }
+                    collect.get(j).setValue(collect.get(j).getValue() - 1);
+                    break;
+                }
+            }
+            if (res[i] == null) {
+                res[i] = false;
+            }
+        }
+        String result = "";
+        for (int i = 0; i < res.length; i++) {
+            result += res[i] + ",";
+        }
+        System.out.println(result.substring(0, result.length() - 1));
+    }
+
+    /**
+     * 76	跳房子I
+     */
+    public static void tiaofangzi1() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        int count = sc.nextInt();
+        boolean isOver = false;
+        int[] a = Arrays.stream(s.replace("[", "").
+                replace("]", "").split(",")).mapToInt(Integer::parseInt).toArray();
+        String res = "[";
+        for (int i = 0; i < a.length - 1; i++) {
+            if (isOver) break;
+            for (int j = i + 1; j < a.length; j++) {
+                if (a[i] + a[j] == count) {
+                    isOver = true;
+                    res += a[i] + ", " + a[j] + "]";
+                    break;
+                }
+            }
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 75	整型数组按个位值排序
+     */
+    public static void shuzupaixu() {
+        Scanner sc = new Scanner(System.in);
+        String[] s = sc.nextLine().split(",");
+        Arrays.sort(s, (a, b) -> {
+            char c1 = a.charAt(a.length() - 1);
+            char c2 = b.charAt(b.length() - 1);
+            if (c1 != c2) {
+                return c1 - c2;
+            }
+            return 0;
+        });
+        System.out.println(String.join(",", s));
+    }
+
+    /**
+     * 74	【满分】文件目录大小
+     */
+    public static void wenjianmuludaxiao() {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        List<String> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, String> mapC = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            String s = sc.nextLine();
+            list.add(s);
+            map.put(Integer.parseInt(s.split(" ")[0]), Integer.parseInt(s.split(" ")[1]));
+            mapC.put(Integer.parseInt(s.split(" ")[0]), s.split(" ")[2].replace("(", "").replace(")", ""));
+        }
+        List<Integer> res = new ArrayList<>();
+        List<Integer> list1 = new ArrayList();
+        list1.add(n);
+        wenjianmuluHandler(list1, res, map, mapC);
+        int sum = res.stream().reduce(Integer::sum).get();
+        System.out.println(sum);
+    }
+
+    public static void wenjianmuluHandler(List<Integer> list, List<Integer> res, Map<Integer, Integer> map, Map<Integer, String> mapC) {
+        for (int i = 0; i < list.size(); i++) {
+            res.add(map.get(list.get(i)));
+            if (!"".equals(mapC.get(list.get(i)))) {
+                List<Integer> lines = Arrays.stream(mapC.get(list.get(i)).split(",")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+                wenjianmuluHandler(lines, res, map, mapC);
+            }
+        }
+    }
+
+    /**
+     * 73	生日礼物
+     */
+    public static void shengruliwu() {
+        Scanner sc = new Scanner(System.in);
+        int[] cakes = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int[] gifts = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int money = sc.nextInt();
+        int res = 0;
+        for (int i = 0; i < cakes.length; i++) {
+            if (cakes[i] > money) continue;
+            for (int j = 0; j < gifts.length; j++) {
+                if (cakes[i] + gifts[j] <= money) {
+                    res++;
+                }
+            }
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 72	矩阵元素的边界值
+     */
+    public static void juzhenyuansubianjiezhi() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        String[] lines = s.replace("[[", "").replace("]]", "").split("],\\[");
+        int[][] a = new int[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            int[] ah = Arrays.stream(lines[i].split(",")).mapToInt(Integer::parseInt).toArray();
+            a[i] = ah;
+        }
+        int[][] b = new int[a[0].length][a.length];
+        for (int i = 0; i < a[0].length; i++) {
+            for (int j = 0; j < a.length; j++) {
+                b[i][j] = a[j][i];
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < b.length; i++) {
+            int max = Arrays.stream(b[i]).max().getAsInt();
+            min = Math.min(min, max);
+        }
+        System.out.println(min);
+    }
+
+    /**
+     * 71	拔河比赛
+     */
+    public static void bahebisai() {
+        Scanner sc = new Scanner(System.in);
+        List<String> lines = new ArrayList<String>();
+        while (!sc.hasNext("s")) {
+            lines.add(sc.nextLine());
+        }
+        Collections.sort(lines, (a, b) -> {
+            int x1 = Integer.parseInt(a.split(" ")[0]);
+            int y1 = Integer.parseInt(a.split(" ")[1]);
+            int x2 = Integer.parseInt(b.split(" ")[0]);
+            int y2 = Integer.parseInt(b.split(" ")[1]);
+            if (x1 == x2) {
+                return y2 - y1;
+            }
+            return x2 - x1;
+        });
+        for (int i = 0; i < 10; i++) {
+            System.out.println(lines.get(i));
+        }
+    }
+
+    /**
+     * 70	乘坐保密电梯
+     */
+    public static void chengzuobaomidianti() {
+        Scanner sc = new Scanner(System.in);
+        int floor = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int mid = n / 2;
+        int allFloor = lines.stream().reduce(Integer::sum).get();
+        downFloor = null;
+        arriveFloor = Integer.MAX_VALUE;
+        isOver = false;
+        diantiHandler(lines, 0, new ArrayList<Integer>(), floor, mid, allFloor);
+        if (downFloor != null) {
+            lines.removeAll(downFloor);
+        }
+        Collections.sort(lines, (a, b) -> b - a);
+        Collections.sort(downFloor, (a, b) -> b - a);
+        String result = "";
+        for (int i = 0; i < mid; i++) {
+            result += lines.get(i) + " " + downFloor.get(i) + " ";
+        }
+        if (mid * 2 < n) {
+            result += lines.get(mid);
+        } else {
+            result = result.substring(0, result.length() - 1);
+        }
+        System.out.println(result);
+    }
+
+    //向下的数列
+    static List<Integer> downFloor = null;
+    static int arriveFloor = Integer.MAX_VALUE;
+    static boolean isOver = false;
+
+    public static void diantiHandler(List<Integer> lines, int index, List<Integer> temp, int floor, int mid, int allFloor) {
+        if (isOver) {
+            return;
+        }
+        if (index == lines.size() || temp.size() == mid) {
+            if (temp.size() == mid) {
+                int sum = temp.stream().reduce(Integer::sum).get();
+                int arrive = allFloor - sum * 2;
+                if (arrive == floor) {
+                    downFloor = new ArrayList<>(temp);
+                    isOver = true;
+                } else if (arrive < floor && ((floor - arrive) < arriveFloor)) {
+                    arriveFloor = floor - arrive;
+                    downFloor = new ArrayList<>(temp);
+                }
+            }
+        } else {
+            for (int i = index; i < lines.size(); i++) {
+                temp.add(lines.get(i));
+                diantiHandler(lines, ++index, temp, floor, mid, allFloor);
+                temp.remove(lines.get(i));
+            }
+        }
+    }
+
+    /**
+     * 69	【满分】构成的正方形数量
+     */
+    public static void zhengfangxingshuliang() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<int[]> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            list.add(new int[]{x, y});
+        }
+        int count = 0;
+        if (n < 4) {
+            System.out.println(0);
+            return;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                for (int k = j + 1; k < list.size(); k++) {
+                    for (int l = k + 1; l < list.size(); l++) {
+                        if (isZFX(list.get(i), list.get(j), list.get(k), list.get(l))) {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(count);
+    }
+
+    public static boolean isZFX(int[] a, int[] b, int[] c, int[] d) {
+        List<int[]> list = new ArrayList<>();
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(d);
+        Map<Integer, Integer> map = new HashMap<>();
+        int juli = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                int x = list.get(i)[0] - list.get(j)[0];
+                int y = list.get(i)[1] - list.get(j)[1];
+                juli = x * x + y * y;
+                map.put(juli, map.getOrDefault(juli, 0) + 1);
+            }
+        }
+        if (map.size() == 2 && (map.get(juli) == 2 || map.get(juli) == 4)) {//一共6个，一个2一个4，不分先后
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 68	字符串分割
+     */
+    public static void zifuchaunfenge() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        hege = 0;
+        fegeshu = 0;
+        shuixianhuaHandler(s, 0);
+        if (hege == 0) {
+            System.out.println(0);
+        } else if (hege > 1) {
+            System.out.println(-1);
+        } else {
+            System.out.println(fegeshu);
+        }
+
+    }
+
+    static int hege = 0;
+    static int fegeshu = 0;
+
+
+    public static void shuixianhuaHandler(String s, int num) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            count += s.charAt(i);
+            if (count > 999) {
+                break;
+            }
+            if (isshuixianhuashu(count)) {
+                if (i == s.length() - 1) {
+                    hege++;
+                    fegeshu = num + 1;
+                } else {
+                    shuixianhuaHandler(s.substring(i + 1), 1 + num);
+                }
+            }
+        }
+    }
+
+    public static boolean isshuixianhuashu(int num) {
+        String s = num + "";
+        int sum = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int p = s.charAt(i) - '0';
+            sum += Math.pow(p, 3);
+        }
+        return sum == num;
+    }
+
+    /**
+     * 67	完全二叉树非叶子部分后序遍历
+     */
+    public static void wanquanerchashu() {
+        Scanner sc = new Scanner(System.in);
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int index = (lines.size() - 2) / 2;
+        TreeNode root = cengxuchaungjian(lines, index);
+//        System.out.println(pre(root));
+//        System.out.println(mid(root));
+        System.out.println(rear(root));
+    }
+
+
+    //二叉树转集合前序  根左右  先加根，（在取根，加入右、左，取左，左完取右），如此重复
+    public static List<Integer> pre(TreeNode t) {
+        List<Integer> list = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        if (t != null) {
+            stack.push(t);
+            while (!stack.isEmpty()) {
+                TreeNode pop = stack.pop();
+                list.add(pop.val);
+                if (pop.right != null) {
+                    stack.push(pop.right);
+                }
+                if (pop.left != null) {
+                    stack.push(pop.left);
+                }
+            }
+        }
+        return list;
+    }
+
+    //二叉树转集合中序  左根右 设置当前为t，一直加左直到为空，出栈，判断右是否为空，不为空，当前置为右
+    public static List<Integer> mid(TreeNode t) {
+        List<Integer> list = new ArrayList();
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        TreeNode cur = t;
+        while (cur != null || !deque.isEmpty()) {
+            while (cur != null) {
+                deque.push(cur);
+                cur = cur.left;
+            }
+            TreeNode pop = deque.pop();
+            list.add(pop.val);
+            cur = pop.right;
+        }
+        return list;
+    }
+
+
+    //二叉树转集合后序  左右根 当前为t，一直加左，左空看右，右不为空和前一个取出的值则当前为右，否则取出，设置pre为pop，cur为null
+    public static List<Integer> rear(TreeNode t) {
+        List<Integer> list = new ArrayList<>();
+        TreeNode cur = t;
+        TreeNode pre = t;
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        while (cur != null || !deque.isEmpty()) {
+            while (cur != null) {
+                deque.push(cur);
+                cur = cur.left;
+            }
+            TreeNode peek = deque.peek();
+            if (peek.right != null && peek.right != pre) {
+                cur = peek.right;
+            } else {
+                TreeNode pop = deque.pop();
+                list.add(pop.val);
+                pre = pop;
+                cur = null;
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 集合构建二叉树层序遍历--带叶子节点的
+     *
+     * @param lines
+     * @return
+     */
+    public static TreeNode cengxuchaungjian(List<Integer> lines, int index) {
+        TreeNode root = null;
+        int i = 0;
+        Queue<TreeNode> queue = new LinkedList();
+        int data = lines.remove(0);
+        root = new TreeNode(data);
+        queue.offer(root);
+        while (lines.size() > 0) {
+            TreeNode node = queue.poll();
+            if (!lines.isEmpty()) {
+                node.left = new TreeNode(lines.remove(0));
+                queue.offer(node.left);
+                i++;
+            }
+            if (i == index) {
+                break;
+            }
+            if (!lines.isEmpty()) {
+                node.right = new TreeNode(lines.remove(0));
+                queue.offer(node.right);
+                i++;
+            }
+            if (i == index) {
+                break;
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 集合构建二叉树层序遍历
+     *
+     * @param lines
+     * @return
+     */
+    public static TreeNode cengxuchaungjian(List<Integer> lines) {
+        TreeNode root = null;
+        Queue<TreeNode> queue = new LinkedList();
+        int data = lines.remove(0);
+        root = new TreeNode(data);
+        queue.offer(root);
+        while (lines.size() > 0) {
+            TreeNode node = queue.poll();
+            if (!lines.isEmpty()) {
+                node.left = new TreeNode(lines.remove(0));
+                queue.offer(node.left);
+            }
+            if (!lines.isEmpty()) {
+                node.right = new TreeNode(lines.remove(0));
+                queue.offer(node.right);
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 66	计算最接近的数
+     */
+    public static void jisuanzuijiejindeshu() {
+        Scanner sc = new Scanner(System.in);
+        String line = sc.nextLine();
+        String[] strings = line.replace("[", "").split("],");
+        int[] lines = Arrays.stream(strings[0].split(",")).mapToInt(Integer::parseInt).toArray();
+        int k = Integer.parseInt(strings[1]);
+        int[] nums = new int[lines.length];
+        System.arraycopy(lines, 0, nums, 0, lines.length);
+        Arrays.sort(nums);
+        int mid = nums[nums.length / 2];
+        int chaju = Integer.MAX_VALUE;
+        int index = 0;
+        for (int i = 0; i < lines.length - k + 1; i++) {
+            int sum = lines[i];
+            for (int j = i + 1; j < k + i; j++) {
+                sum -= lines[j];
+            }
+            if (Math.abs(sum - mid) <= chaju) {
+                chaju = Math.abs(sum - mid);
+                index = i;
+            }
+        }
+        System.out.println(index);
+    }
 
     /**
      * 65  判断字符串子序列

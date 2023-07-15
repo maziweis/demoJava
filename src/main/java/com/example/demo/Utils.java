@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Utils {
     public static void swap(int[] list, int a, int b) {
         Integer temp = list[a];
@@ -56,5 +59,76 @@ public class Utils {
         }
     }
 
+    /**
+     * 数组深度复制
+     *
+     * @param strings
+     * @return
+     */
+    public static String[][] copy(String[][] strings) {
+        int x = strings.length;
+        String[][] copyS = new String[x][x];
 
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < x; j++) {
+                copyS[i][j] = strings[i][j];
+            }
+        }
+        return copyS;
+    }
+
+    /**
+     * 两个数最大公约数为1
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean iszhishu(int a, int b) {
+        int yushu = 0;
+        while (a % b != 0) {
+            yushu = a % b;
+            a = b;
+            b = yushu;
+        }
+        return b == 1;
+    }
+
+    /**
+     * 字符串右侧补位
+     *
+     * @param s
+     * @return
+     */
+    public static String stringRightPad(String s) {
+        String str = s + "***";
+        return str.substring(0, 4);
+    }
+
+    /**
+     * 字符串反向排序
+     *
+     * @param s
+     * @return
+     */
+    public static String stringReverse(String s) {
+        char[] chr = s.toCharArray();
+        String res = "";
+        for (int i = chr.length - 1; i >= 0; i--) {
+            if (chr[i] >= 'a' && chr[i] <= 'z' || chr[i] >= 'A' && chr[i] <= 'Z') {
+                res += chr[i];
+            } else {
+                return s;
+            }
+        }
+        return res;
+    }
+
+    public static List<Integer> copyList(List<Integer> a) {
+        List<Integer> b = new ArrayList<Integer>();
+        for (int i = 0; i < a.size(); i++) {
+            b.add(a.get(i));
+        }
+        return b;
+    }
 }

@@ -1,8 +1,7 @@
 package com.example.demo;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -11,34 +10,60 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        String[] strings = sc.nextLine().split(" ");
-        int[] ints = Arrays.stream(strings).mapToInt(Integer::parseInt).toArray();
+        String yuan = sc.nextLine();
+        String mubiao = sc.nextLine();
 
-        int c = ints[0];
-        int b = ints[1];
-
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < 10; i++) {
-            //将数字转化为16进制并用0填满8位数
-            String To16 = String.format("%08x", ints[i + 2]);
-            //四个字节的和
-            int count = 0;
-            for (int j = 0; j < 7; j += 2) {
-                count += Integer.valueOf(To16.substring(j, j + 2));
-            }
-
-            int mo = count % b;
-            if (mo < c) {
-                map.put(mo, map.getOrDefault(mo, 0) + 1);
+        List<String> mubiaoList = new ArrayList<>();
+        String temp = "";
+        //是否在中括号里面
+        boolean isKuohao = false;
+        for (int i = 0; i < mubiao.length(); i++) {
+            char c = mubiao.charAt(i);
+            if ((c == '[' || c == ']')) {
+                if (temp != "") {
+                    mubiaoList.add(temp);
+                    temp = "";
+                }
+                isKuohao = !isKuohao;
+            } else if (isKuohao) {
+                //在中括号里面的则进行拼接（模糊查询）
+                temp += c;
+            } else {
+                //不在中括号里面的需要精确匹配
+                mubiaoList.add(String.valueOf(c));
             }
         }
 
-        int max = 0;
-        for (int value : map.values()) {
-            max = Math.max(max, value);
+        int res = -1;
+        for (int i = 0; i < yuan.length(); i++) {
+
+            String s = String.valueOf(yuan.charAt(i));
+            //是否能够匹配
+            boolean isMatch = true;
+            if (s.equals(mubiaoList.get(0))) {
+                //第一个字符对应上了
+                //源字符串的索引
+                int index = i + 1;
+                //遍历目标字符串
+                for (int j = 1; j < mubiaoList.size(); j++) {
+                    String str = mubiaoList.get(j);
+                    if (index < yuan.length() && str.contains(String.valueOf(yuan.charAt(index)))) {
+                        //源字符串索引没有越界，且字符符合目标中的字符
+                        index++;
+                    } else {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch) {
+                    res = i;
+                    break;
+                }
+            }
+
         }
 
-        System.out.println(max);
+        System.out.println(res);
     }
 
 }

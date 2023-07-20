@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.test;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class HwOD2023B {
 
     public static void main(String[] args) {
-        {
+        while (true) {
 //                fenpinguo();
 //                taiyangneng();
 //                fentangguo();
@@ -24,12 +24,12 @@ public class HwOD2023B {
 //                fenban();
 //                dapuke();
 //                zhongshuP();
-//                ipzhuanhuan();
-//                stringDigest();
-//                xiangyingbaowen();
-//                shijiantuisong();
-//                shuliemiaoshu();
-//                zuixiaoshuzi();
+//            ipzhuanhuan();
+//            stringDigest();
+//            xiangyingbaowen();
+//            shijiantuisong();
+//            shuliemiaoshu();
+//            zuixiaoshuzi();
 //            shejibisai();
 //            zhaozhongdian();
 //            zifuchuanjiami();
@@ -64,6 +64,30 @@ public class HwOD2023B {
 //            VLANziyuanchi();
 //            shuzixulie();
 //            duoshuzhihe();
+//            shuzifanzhuandayin();
+//            shudayan();
+//            jisuanzuidachengji();
+//            zuichanglianxuzixulie();
+//            juzhenxishusaomiao();
+//            juzhenzuidazhi();
+//            youxianjiduilie();
+//            aimianbanshibie();
+//            huifushuzixulie();
+//            gougushuyuanzu();
+//            stringzixulie();
+//            jisuanzuijiejindeshu();
+//            wanquanerchashu();
+//            zifuchaunfenge();
+//            zhengfangxingshuliang();
+//            chengzuobaomidianti();
+//            bahebisai();
+//            juzhenyuansubianjiezhi();
+//            shengruliwu();
+//            wenjianmuludaxiao();
+//            shuzupaixu();
+//            tiaofangzi1();
+//            neicunziyuanfenpei();
+//            zengqiangdeStrStr();
 //            yijuxingqiugaizao();
 //            zhaozuixiaoshu();
 //            fuwuguzhang();
@@ -86,33 +110,23 @@ public class HwOD2023B {
 //            tiaofangzi2();
 //            zhaoshuzi();
 //            pinglunzhuanhuanshuchu();
-//            zhongshujuli();
-//            guankanyanchu();
-//            tiaogezi();
+//            zuijiazhungshujuli();
+//            guankanwenyihuiyanwenti();
+//            tiaogeziyouxi();
 //            fenjimu();
 //            tiaogezi1();
 //            caiyangguolv();
 //            renqizuigaodianpu();
 //            shuzhuangjiegou();
 //            zifupipei();
-//            shuzibidaxiao();
+//            shuzixuliebidaxiao();
 //            erweisan();
 //            erchashubianli();
-        }
-        while (true) {
-//            jisuanzuijiejindeshu();
-//            wanquanerchashu();
-//            zifuchaunfenge();
-//            zhengfangxingshuliang();
-//            chengzuobaomidianti();
-//            bahebisai();
-//            juzhenyuansubianjiezhi();
-//            shengruliwu();
-//            wenjianmuludaxiao();
-//            shuzupaixu();
-//            tiaofangzi1();
-//            neicunziyuanfenpei();
-            zengqiangdeStrStr();
+//            alibabazhaohuangjinbaoxiangIV();
+//            melondenanti();
+//            jisuanwumalv();
+//            diejimu();
+            zuichanglianxufangboxinhao();
         }
     }
 
@@ -122,6 +136,214 @@ public class HwOD2023B {
 
 
 ////////////////////////////////中阶/////////////////////////////////////////
+
+    /**
+     * 39	最长方连续方波信号
+     */
+    public static void zuichanglianxufangboxinhao() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+
+        String res = "";    //最终方波
+        String temp = "";   //方波容器
+        boolean b = false;  //符合方波信号
+        boolean isFomat = true; //符合完全连续方波信号
+        if (s.charAt(0) == '0') {       //如果第一个为0，则从第一个开始识别
+            temp = "0";
+            b = true;
+        }
+
+        for (int i = 1; i < s.length(); i++) {
+            if (b) {      //识别中
+                if (s.charAt(i) == s.charAt(i - 1)) {     //此时的数等于前一个数
+                    if (s.charAt(i) == '0') {       //出现重复的0则出局
+                        if (temp.length() >= 3 && isFomat) {        //如果都是0，且符合规则（不含连续1大于3个长度）
+                            res = temp.length() > res.length() ? temp : res;      //取最长信号
+                        }
+                        temp = "0";     //容器重置
+                        isFomat = true;
+                    } else {
+                        temp += s.charAt(i);      //出现重复的1继续，不过已不符合要求（不含连续的1）
+                        isFomat = false;
+                    }
+                } else {
+                    temp += s.charAt(i);      //无重复的值则继续
+                    if (i == s.length() - 1 && s.charAt(i) == '0' && isFomat) { //最后一个是0且符合连续交互
+                        res = temp.length() > res.length() ? temp : res;      //取最长信号
+                    }
+                }
+            } else {
+                if (s.charAt(i) == '0') {   //遇到0就开始识别
+                    temp = "0";
+                    b = true;
+                }
+            }
+        }
+        System.out.println(res.length() == 0 ? -1 : res);
+    }
+
+    /**
+     * 38	【满分】叠积木
+     */
+    public static void diejimu() {
+        Scanner sc = new Scanner(System.in);
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        int sum = lines.stream().reduce(Integer::sum).get();
+        Collections.sort(lines, (a, b) -> b - a);
+        int chang = lines.get(0);
+        int chenggong = -1;
+        List<Integer> list = new ArrayList<Integer>();
+        copyList(lines, list);
+        int index = 0;
+        if (sum % chang == 0) {
+            chenggong = isQiang(list, chang, index);
+        }
+        if (chenggong == -1) {
+            chang = lines.get(0) + lines.get(lines.size() - 1);
+            list = new ArrayList<Integer>();
+            copyList(lines, list);
+            if (sum % chang == 0) {
+                chenggong = isQiang(list, chang, index);
+            }
+        }
+        System.out.println(chenggong);
+    }
+
+    public static int isQiang(List<Integer> list, int chang, int index) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == chang) {
+                list.remove(i);
+                index++;
+                i--;
+                continue;
+            }
+            if (list.size() >= 2 && list.get(i) + list.get(list.size() - 1) == chang) {
+                list.remove(i);
+                list.remove(list.size() - 1);
+                index++;
+                i--;
+            } else {
+                return -1;
+            }
+        }
+        return index;
+    }
+
+    public static void copyList(List<Integer> lines, List<Integer> list) {
+        for (int i = 0; i < lines.size(); i++) {
+            list.add(lines.get(i));
+        }
+    }
+
+    /**
+     * 37	【满分】计算误码率
+     */
+    public static void jisuanwumalv() {
+        Scanner sc = new Scanner(System.in);
+        String a = sc.nextLine();
+        String b = sc.nextLine();
+        String a1 = "";
+        String b1 = "";
+        String ints = "";
+        for (int i = 0; i < a.length(); i++) {
+            char c = a.charAt(i);
+            if (Character.isDigit(c)) {
+                ints += c;
+            } else if (Character.isLetter(c)) {
+                int n = Integer.parseInt(ints);
+                for (int j = 0; j < n; j++) {
+                    a1 += c;
+                }
+                ints = "";
+            }
+        }
+        for (int i = 0; i < b.length(); i++) {
+            char c = b.charAt(i);
+            if (Character.isDigit(c)) {
+                ints += c;
+            } else if (Character.isLetter(c)) {
+                int n = Integer.parseInt(ints);
+                for (int j = 0; j < n; j++) {
+                    b1 += c;
+                }
+                ints = "";
+            }
+        }
+        int num = 0;
+        for (int i = 0; i < a1.length(); i++) {
+            char ca = a1.charAt(i);
+            char cb = b1.charAt(i);
+            if (ca != cb) {
+                num++;
+            }
+        }
+        System.out.println(num + "/" + a1.length());
+    }
+
+    /**
+     * 36	MELON的难题
+     */
+    public static void melondenanti() {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        Collections.sort(lines, (a, b) -> b - a);
+        int sum = lines.stream().reduce(Integer::sum).get();
+        int mid = sum / 2;
+        if (mid * 2 != sum) {
+            System.out.println(-1);
+            return;
+        }
+        yuhuashi = Integer.MAX_VALUE;
+        melondenantiBack(lines, 0, 0, new ArrayList<Integer>(), mid);
+        System.out.println(yuhuashi);
+    }
+
+    static int yuhuashi = Integer.MAX_VALUE;
+
+    public static void melondenantiBack(List<Integer> lines, int index, int sum, List<Integer> temp, int mid) {
+        if (index >= lines.size() || sum == mid) {
+            if (sum == mid) {
+                yuhuashi = Math.min(yuhuashi, temp.size());
+            }
+        } else {
+            for (int i = index; i < lines.size(); i++) {
+                temp.add(lines.get(i));
+                sum += lines.get(i);
+                melondenantiBack(lines, ++index, sum, temp, mid);
+                temp.remove(lines.get(i));
+                sum -= lines.get(i);
+            }
+        }
+    }
+
+    /**
+     * 35	阿里巴巴找黄金宝箱(IV)
+     */
+    public static void alibabazhaohuangjinbaoxiangIV() {
+        Scanner sc = new Scanner(System.in);
+        int[] lines = Arrays.stream(sc.nextLine().split(",")).mapToInt(Integer::parseInt).toArray();
+        int[] ints = new int[lines.length * 2];
+        System.arraycopy(lines, 0, ints, 0, lines.length);
+        System.arraycopy(lines, 0, ints, lines.length, lines.length);
+        int[] res = new int[lines.length];
+        Arrays.fill(res, -1);
+        for (int i = 0; i < lines.length; i++) {
+            int x = lines[i];
+            for (int j = i + 1; j < ints.length; j++) {
+                if (ints[j] > x) {
+                    res[i] = ints[j];
+                    break;
+                }
+            }
+        }
+        String s = "";
+        for (int i = 0; i < res.length; i++) {
+            s += res[i] + ",";
+        }
+        System.out.println(s.substring(0, s.length() - 1));
+    }
 
     /**
      * 34	二叉树遍历
@@ -290,31 +512,38 @@ public class HwOD2023B {
     /**
      * 32	数字序列比大小
      */
-    public static void shuzibidaxiao() {
+    public static void shuzixuliebidaxiao() {
         Scanner sc = new Scanner(System.in);
-        int num = sc.nextInt();
+        int N = sc.nextInt();
         sc.nextLine();
-        int[] a = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        int[] b = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        Arrays.sort(a);
-        Arrays.sort(b);
-        int ying = 0;
-        int ping = 0;
-        int ai = 0;
-        for (int i = 0; i < b.length; i++) {
-            for (int j = ai; j < a.length; j++) {
-                if (a[j] > b[i]) {
-                    ying++;
-                    ai = j + 1;
-                    break;
-                } else if (a[j] == b[i]) {
-                    ping++;
-                    ai = j + 1;
-                    break;
+        String[] stringA = sc.nextLine().split(" ");
+        String[] stringB = sc.nextLine().split(" ");
+
+        List<Integer> listA = new ArrayList<>();
+        List<Integer> listB = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            listA.add(Integer.valueOf(stringA[i]));
+            listB.add(Integer.valueOf(stringB[i]));
+        }
+
+        Collections.sort(listA);
+        Collections.sort(listB);
+        int res = 0;
+        for (int i = 0; i < N; i++) {
+            int numA = listA.get(i);
+            if (numA < listB.get(0)) {
+                //A小于B的第一个数，则让他跟B的最大数比
+                res--;
+                listB.remove(listB.size() - 1);
+            } else {
+                if (numA > listB.get(0)) {
+                    res++;
                 }
+                listB.remove(0);
             }
         }
-        System.out.println(ying - (num - ying - ping));
+
+        System.out.println(res);
     }
 
     /**
@@ -558,7 +787,7 @@ public class HwOD2023B {
     /**
      * 25	跳格子游戏
      */
-    public static void tiaogezi() {
+    public static void tiaogeziyouxi() {
         Scanner sc = new Scanner(System.in);
         int num = sc.nextInt();
         sc.nextLine();
@@ -584,14 +813,10 @@ public class HwOD2023B {
         while (found) {
             found = false;
             int number = set.size();
-            for (int i = 0; i < num; i++) {
-                if (set.contains(i)) continue;
-                for (int j = 0; j < list.size(); j++) {
-                    int[] temp = list.get(j);
-                    if (temp[1] == i && set.contains(temp[0])) {
-                        set.add(temp[1]);
-                        break;
-                    }
+            for (int j = 0; j < list.size(); j++) {
+                int[] temp = list.get(j);
+                if (set.contains(temp[0])) {
+                    set.add(temp[1]);
                 }
             }
             if (set.size() == num) {
@@ -608,7 +833,7 @@ public class HwOD2023B {
     /**
      * 24	观看文艺汇演问题
      */
-    public static void guankanyanchu() {
+    public static void guankanwenyihuiyanwenti() {
         Scanner sc = new Scanner(System.in);
         int num = sc.nextInt();
         sc.nextLine();
@@ -628,13 +853,13 @@ public class HwOD2023B {
         res[0] = 1;
         int end = list.get(0)[1];
         for (int i = 1; i < list.size(); i++) {
-            int right = list.get(i)[0];
-            if (end + 15 <= right) {
+            int left = list.get(i)[0];
+            if (end + 15 <= left) {
                 res[i] = res[i - 1] + 1;
-                end = right;
+                end = left;
             } else {
                 res[i] = res[i - 1];
-                end = Math.min(end, right);
+                end = Math.min(end, left);
             }
         }
         System.out.println(res[num - 1]);
@@ -643,7 +868,7 @@ public class HwOD2023B {
     /**
      * 23	【满分】最佳植树距离
      */
-    public static void zhongshujuli() {
+    public static void zuijiazhungshujuli() {
         Scanner sc = new Scanner(System.in);
 //        7
 //        1 5 3 6 10 8 13
@@ -938,7 +1163,7 @@ public class HwOD2023B {
         dp[0] = lines[0];
         for (int i = 1; i < lines.length; i++) {
             if (i == 1) {
-                dp[i] = Math.max(dp[i - 1], lines[i]);
+                dp[i] = Math.max(dp[0], lines[i]);
             } else {
                 dp[i] = Math.max(dp[i - 1], lines[i] + dp[i - 2]);
             }
@@ -953,46 +1178,25 @@ public class HwOD2023B {
         Scanner sc = new Scanner(System.in);
         List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
         int sum = lines.stream().reduce(Integer::sum).get();
-        int mid = sum / 2;
         zuixiaozhanlicha = Integer.MAX_VALUE;
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-        lanqiubisaiBack(lines, new ArrayList<>(), 0, mid, res, sum == mid * 2);
-        int resSum = res.get(0).stream().reduce(Integer::sum).get();
-        System.out.println(Math.abs(sum - resSum * 2));
+        lanqiubisaiBack(lines, new ArrayList<>(), 0, sum);
+        System.out.println(zuixiaozhanlicha);
     }
 
     static int zuixiaozhanlicha = Integer.MAX_VALUE;
 
-    public static void lanqiubisaiBack(List<Integer> list, List<Integer> temp, int index, int mid, List<List<Integer>> res, boolean isOushu) {
+    public static void lanqiubisaiBack(List<Integer> list, List<Integer> temp, int index, int sum) {
         if (index >= list.size() || temp.size() == 5) {
             if (temp.size() == 5) {
                 int tempSum = temp.stream().reduce(Integer::sum).get();
-                if (isOushu) {
-                    if (Math.abs(tempSum - mid) < zuixiaozhanlicha) {
-                        zuixiaozhanlicha = Math.abs(tempSum - mid);
-                        res.clear();
-                        res.add(new ArrayList<>(temp));
-                    }
-                } else {
-                    if (Math.abs(tempSum - mid) <= zuixiaozhanlicha) {
-                        if (Math.abs(tempSum - mid) < zuixiaozhanlicha) {
-                            zuixiaozhanlicha = Math.abs(tempSum - mid);
-                            res.clear();
-                            res.add(new ArrayList<>(temp));
-                        } else {
-                            if (tempSum > mid) {
-                                zuixiaozhanlicha = Math.abs(tempSum - mid);
-                                res.clear();
-                                res.add(new ArrayList<>(temp));
-                            }
-                        }
-                    }
+                if (Math.abs(tempSum * 2 - sum) < zuixiaozhanlicha) {
+                    zuixiaozhanlicha = Math.abs(tempSum * 2 - sum);
                 }
             }
         } else {
             for (int i = index; i < list.size(); i++) {
                 temp.add(list.get(i));
-                lanqiubisaiBack(list, temp, ++index, mid, res, isOushu);
+                lanqiubisaiBack(list, temp, ++index, sum);
                 temp.remove(list.get(i));
             }
         }
@@ -1228,11 +1432,12 @@ public class HwOD2023B {
             }
             return b[0] - a[0];
         });
-        int count = 0;
+        int count = 1;
         int max = 0;
         for (int i = 0; i < list.size() - max; i++) {
             int pl = list.get(i)[0];
             int pw = list.get(i)[1];
+            count = 1;
             for (int j = i + 1; j < list.size(); j++) {
                 int cl = list.get(j)[0];
                 int cw = list.get(j)[1];
@@ -1255,7 +1460,7 @@ public class HwOD2023B {
         Scanner sc = new Scanner(System.in);
         List<int[]> list = new ArrayList<>();
         List<int[]> jiaoji = new ArrayList<>();
-        while (!sc.hasNext("100")) {
+        while (!sc.hasNext("s")) {
             String[] line = sc.nextLine().split(" ");
             list.add(new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1])});
         }
@@ -1323,11 +1528,11 @@ public class HwOD2023B {
         String word = sc.nextLine();
         List<String> list = new ArrayList<>();
         for (int i = 0; i < strs.length; i++) {
-            for (int j = 0; j < strs.length; j++) {
+            for (int j = 0; j < strs[0].length; j++) {
                 if (strs[i][j].equals(word.charAt(0) + "")) {
                     strs[i][j] = "";
                     list.add(i + "," + j);
-                    if (zhandanciBack(strs, list, word, 0, 0, 0)) {
+                    if (zhandanciBack(strs, list, word, 0, i, j)) {
                         System.out.println(String.join(",", list));
                         return;
                     }
@@ -1403,7 +1608,7 @@ public class HwOD2023B {
             char c2 = s2.charAt(i);
             list.add(Math.abs(c1 - c2));
         }
-        int max = 1;
+        int max = 0;
         for (int i = 0; i < list.size(); i++) {
             int c = list.get(i);
             if (c > num) continue;
@@ -1431,41 +1636,41 @@ public class HwOD2023B {
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();
         Deque<Integer> integers = new ArrayDeque<>();
-        Deque<StringBuffer> stringBuffers = new ArrayDeque<>();
-        StringBuffer strs = new StringBuffer();
+        Deque<String> strings = new ArrayDeque<>();
+        String strs = new String();
         String ints = "";
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isDigit(c)) {
-                if (strs.length() > 0) {
-                    stringBuffers.push(strs);
-                    strs = new StringBuffer();
-                }
                 ints += c;
+                if (strs.length() > 0) {
+                    strings.push(strs);
+                    strs = "";
+                }
             } else if (c == '[') {
                 integers.push(Integer.parseInt(ints));
                 ints = "";
             } else if (c == ']') {
                 int num = integers.pop();
                 if (strs.length() > 0) {
-                    stringBuffers.push(strs);
-                    strs = new StringBuffer();
+                    strings.push(strs);
+                    strs = "";
                 }
-                String strP = stringBuffers.pop().toString();
+                String strP = strings.pop();
                 for (int j = 0; j < num; j++) {
-                    strs.append(strP);
+                    strs += strP;
                 }
-                if (stringBuffers.isEmpty()) {
-                    stringBuffers.push(strs);
+                if (strings.isEmpty()) {
+                    strings.push(strs);
                 } else {
-                    stringBuffers.push(stringBuffers.pop().append(strs));
+                    strings.push(strings.pop() + strs);
                 }
-                strs = new StringBuffer();
+                strs = "";
             } else {
-                strs.append(c);
+                strs += c;
             }
         }
-        System.out.println(stringBuffers.pop());
+        System.out.println(strings.pop());
     }
 
     /**
@@ -1474,8 +1679,8 @@ public class HwOD2023B {
     public static void fuwuguzhang() {
         Scanner sc = new Scanner(System.in);
         String lines = sc.nextLine();
-        Set<String> errors = Arrays.stream(sc.nextLine().split(",")).collect(Collectors.toSet());
         List<String> fuwus = Arrays.stream(lines.split(",")).collect(Collectors.toList());
+        Set<String> errors = Arrays.stream(sc.nextLine().split(",")).collect(Collectors.toSet());
         boolean found = true;
         while (found) {
             found = false;
@@ -1601,7 +1806,7 @@ public class HwOD2023B {
     }
 
 
-////////////////////////////////////////初阶////////////////////////////////////////
+////初阶////////////////////////////////////////
 
     /**
      * 78	增强的strstr
@@ -1879,7 +2084,7 @@ public class HwOD2023B {
 
     //向下的数列
     static List<Integer> downFloor = null;
-    static int arriveFloor = Integer.MAX_VALUE;
+    static int arriveFloor = Integer.MAX_VALUE;//实际到达的楼层和应该到达的楼层差
     static boolean isOver = false;
 
     public static void diantiHandler(List<Integer> lines, int index, List<Integer> temp, int floor, int mid, int allFloor) {
@@ -2017,8 +2222,8 @@ public class HwOD2023B {
     public static void wanquanerchashu() {
         Scanner sc = new Scanner(System.in);
         List<Integer> lines = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
-        int index = (lines.size() - 2) / 2;
-        TreeNode root = cengxuchaungjian(lines, index);
+        int index = (lines.size() - 2) / 2;//最后一个带叶子节点下标，画图可知
+        TreeNode root = cengxuchuangjian(lines, index);
 //        System.out.println(pre(root));
 //        System.out.println(mid(root));
         System.out.println(rear(root));
@@ -2093,7 +2298,7 @@ public class HwOD2023B {
      * @param lines
      * @return
      */
-    public static TreeNode cengxuchaungjian(List<Integer> lines, int index) {
+    public static TreeNode cengxuchuangjian(List<Integer> lines, int index) {
         TreeNode root = null;
         int i = 0;
         Queue<TreeNode> queue = new LinkedList();
@@ -2587,6 +2792,9 @@ public class HwOD2023B {
         String s = sc.nextLine();
         int max = 0;
         int temp = 0;
+        if (Character.isDigit(s.charAt(0))) {
+            temp = 1;
+        }
         for (int i = 1; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isDigit(c)) {
@@ -2839,6 +3047,10 @@ public class HwOD2023B {
         System.out.println(max);
     }
 
+    /**
+     * tkv解码
+     * 小断序  从右往左读 占两个字节
+     */
     public static void TLVjiema() {
         Scanner sc = new Scanner(System.in);
         String tag = sc.nextLine();
@@ -2861,7 +3073,7 @@ public class HwOD2023B {
     /**
      * 45 代码编辑器
      */
-    public static void daimaEditor() {
+    public static void daimabianjiqi() {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         sc.nextLine();
@@ -3000,6 +3212,9 @@ public class HwOD2023B {
         System.out.println(count);
     }
 
+    /**
+     * 41	热点网站统计
+     */
     public static void redianwangzhantongji() {
         Scanner sc = new Scanner(System.in);
         Map<String, Integer> map = new HashMap<String, Integer>();
@@ -4000,7 +4215,7 @@ public class HwOD2023B {
             if (i == buzhong - 1) {  //最开始补种buzhong棵树
                 max = Math.max(max, lines[i + 1] - 1);
             } else if (i == sishu - 1) { //最后补种buzhong棵树
-                max = Math.max(max, all - lines[sishu - buzhong - 1]);
+                max = Math.max(max, all - lines[i - buzhong]);
             } else { //中间补种buzhong棵树，从下标buzhong开始
                 max = Math.max(max, lines[i + 1] - 1 - lines[i - buzhong]);
             }

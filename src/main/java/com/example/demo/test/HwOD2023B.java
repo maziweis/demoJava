@@ -119,14 +119,14 @@ public class HwOD2023B {
 //            renqizuigaodianpu();
 //            shuzhuangjiegou();
 //            zifupipei();
-//            shuzixuliebidaxiao();
+            shuzixuliebidaxiao();
 //            erweisan();
 //            erchashubianli();
 //            alibabazhaohuangjinbaoxiangIV();
 //            melondenanti();
 //            jisuanwumalv();
 //            diejimu();
-            zuichanglianxufangboxinhao();
+//            zuichanglianxufangboxinhao();
         }
     }
 
@@ -521,7 +521,7 @@ public class HwOD2023B {
 
         List<Integer> listA = new ArrayList<>();
         List<Integer> listB = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < stringA.length; i++) {
             listA.add(Integer.valueOf(stringA[i]));
             listB.add(Integer.valueOf(stringB[i]));
         }
@@ -529,17 +529,26 @@ public class HwOD2023B {
         Collections.sort(listA);
         Collections.sort(listB);
         int res = 0;
-        for (int i = 0; i < N; i++) {
-            int numA = listA.get(i);
-            if (numA < listB.get(0)) {
-                //A小于B的第一个数，则让他跟B的最大数比
+        while (listA.size() > 0) {
+            if (listA.get(listA.size() - 1) > listB.get(listB.size() - 1)) {
+                res++;
+                listA.remove(listA.size() - 1);
+                listB.remove(listB.size() - 1);
+            } else if (listA.get(listA.size() - 1) < listB.get(listB.size() - 1)) {
                 res--;
+                listA.remove(0);
                 listB.remove(listB.size() - 1);
             } else {
-                if (numA > listB.get(0)) {
+                if (listA.get(0) > listB.get(0)) {
                     res++;
+                    listA.remove(0);
+                    listB.remove(0);
+                } else {
+                    if (listA.get(0) < listB.get(listB.size() - 1))
+                        res--;
+                    listA.remove(0);
+                    listB.remove(listB.size() - 1);
                 }
-                listB.remove(0);
             }
         }
 

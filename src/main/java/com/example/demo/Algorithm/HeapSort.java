@@ -1,6 +1,6 @@
 package com.example.demo.Algorithm;
 
-import com.example.demo.Utils;
+import com.example.demo.Utils.Utils;
 
 import java.util.Arrays;
 

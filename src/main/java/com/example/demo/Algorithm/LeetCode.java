@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Algorithm;
 
 import org.jetbrains.annotations.NotNull;
 

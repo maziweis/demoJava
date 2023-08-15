@@ -1,4 +1,4 @@
-package com.example.demo.Algorithm;
+package com.example.demo.Algorithm.sort;
 
 import com.example.demo.Utils.Utils;
 

@@ -1,4 +1,4 @@
-package com.example.demo.Algorithm;
+package com.example.demo.Algorithm.sort;
 
 
 import org.jetbrains.annotations.NotNull;

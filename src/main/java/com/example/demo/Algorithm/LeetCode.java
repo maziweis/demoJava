@@ -3,23 +3,583 @@ package com.example.demo.Algorithm;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LeetCode {
     public static void main(String[] args) {
+
+
         int[] a = {1, 1, 2};
 //        System.out.println(isValid("([]{})"));
-
-        System.out.println(new LeetCode().divide(1026117192, -874002063));
+        String s = "barfoothefoobarman";
+        String[] words = new String[]{"foo", "bar"};
+//        new LeetCode().generateParenthesis(3);
+//        System.out.println(isMatch("aabd", "a*"));
+//        System.out.println(new LeetCode().findSubstring(s, words).toString());
+        int[] nums1 = new int[]{5, 7, 7, 9, 9, 10};
+        int m = 3;
+        int[] nums2 = new int[]{2, 1, 1};
+        int[][] nums3 = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        int n = 3;
+//        new LeetCode().reverse(nums1);
+        char[][] board = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'}, {'6', '.', '.', '1', '9', '5', '.', '.', '.'}, {'.', '9', '8', '.', '.', '.', '.', '6', '.'}, {'8', '.', '.', '.', '6', '.', '.', '.', '3'}, {'4', '.', '.', '8', '.', '3', '.', '.', '1'}, {'7', '.', '.', '.', '2', '.', '.', '.', '6'}, {'.', '6', '.', '.', '.', '.', '2', '8', '.'}, {'.', '.', '.', '4', '1', '9', '.', '.', '5'}, {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
+        new LeetCode().rotate(nums3);
+//        System.out.println(ss);
     }
 
-    public boolean test() {
-        ListNode ln = new ListNode(1, new ListNode(2, new ListNode(5, new ListNode(6, new ListNode(8)))));
-        ListNode ln1 = new ListNode(1);
-        ListNode ln2 = new ListNode(3, new ListNode(6));
-        ListNode ln3 = new ListNode(3, new ListNode(6, new ListNode(8)));
-        ListNode[] listNodes = new ListNode[]{ln, ln1, ln2};
-        ListNode res = reverseKGroup2(ln, 3);
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] ^= matrix[n - 1 - i][j];
+                matrix[n - 1 - i][j] ^= matrix[i][j];
+                matrix[i][j] ^= matrix[n - 1 - i][j];
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                matrix[i][j] ^= matrix[j][i];
+                matrix[j][i] ^= matrix[i][j];
+                matrix[i][j] ^= matrix[j][i];
+            }
+        }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<Integer> data = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        List<List<Integer>> res = new ArrayList<>();
+        permuteUniqueBack(data, res, new ArrayList<>(), new ArrayList<>());
+        return res;
+    }
+
+    public void permuteUniqueBack(List<Integer> nums, List<List<Integer>> res, List<Integer> temp, List<Integer> tempI) {
+        if (temp.size() == nums.size()) {
+            if (!res.contains(temp))
+                res.add(new ArrayList<>(temp));
+        } else {
+            for (int i = 0; i < nums.size(); i++) {
+                if (tempI.contains(i)) continue;
+                tempI.add(i);
+                temp.add(nums.get(i));
+                permuteUniqueBack(nums, res, temp, tempI);
+                temp.remove(temp.size() - 1);
+                tempI.remove(tempI.size() - 1);
+            }
+        }
+    }
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        permuteBack(nums, res, new ArrayList<>());
+        return res;
+    }
+
+    public void permuteBack(int[] nums, List<List<Integer>> res, List<Integer> temp) {
+        if (temp.size() == nums.length) {
+            res.add(new ArrayList<>(temp));
+        } else {
+            for (int i = 0; i < nums.length; i++) {
+                if (temp.contains(nums[i])) continue;
+                temp.add(nums[i]);
+                permuteBack(nums, res, temp);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+
+    public int jump(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, Integer.MAX_VALUE - 1);
+        dp[0] = 0;
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] >= i - j) {
+                    dp[i] = Math.min(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return dp[nums.length - 1];
+    }
+
+    public int firstMissingPositive(int[] nums) {
+        Set<Integer> list = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            list.add(i + 1);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (list.contains(nums[i])) {
+                list.remove(Integer.valueOf(nums[i]));
+            }
+        }
+        if (list.size() == 0) return nums.length + 1;
+        return list.stream().findFirst().get();
+    }
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        combinationSum2Handle(candidates, target, 0, new ArrayList<>());
+        return combinationSum2.stream().collect(Collectors.toList());
+    }
+
+    List<List<Integer>> combinationSum2 = new ArrayList<>();
+
+    public void combinationSum2Handle(int[] candidates, int target, int index, List<Integer> tmp) {
+        if (0 == target || index >= candidates.length) {
+            if (target == 0 && !combinationSum2.contains(tmp)) {
+                combinationSum2.add(new ArrayList<>(tmp));
+            }
+        } else {
+            for (int i = index; i < candidates.length; i++) {
+                if (i > index && candidates[i - 1] == candidates[i]) continue;
+                if (target - candidates[i] < 0) break;
+                tmp.add(candidates[i]);
+                combinationSum2Handle(candidates, target - candidates[i], i + 1, tmp);
+                tmp.remove(tmp.size() - 1);
+            }
+        }
+    }
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        combinationSumHandle(candidates, target, 0, new ArrayList<>());
+        return combinationSum;
+    }
+
+    List<List<Integer>> combinationSum = new ArrayList<>();
+
+    public void combinationSumHandle(int[] candidates, int target, int index, List<Integer> tmp) {
+        if (0 >= target) {
+            if (0 == target) {
+                combinationSum.add(new ArrayList<>(tmp));
+            }
+        } else {
+            for (int i = index; i < candidates.length; i++) {
+                tmp.add(candidates[i]);
+                combinationSumHandle(candidates, target - candidates[i], i, tmp);
+                tmp.remove(tmp.size() - 1);
+            }
+        }
+    }
+
+    public String countAndSay(int n) {
+        if (n == 1) return "1";
+        String s = countAndSay(n - 1);
+        char c = s.charAt(0);
+        int count = 1;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == c) count++;
+            else {
+                sb.append(count + String.valueOf(c));
+                count = 1;
+                c = s.charAt(i);
+            }
+        }
+        sb.append(count + String.valueOf(c));
+        return sb.toString();
+    }
+
+    public void solveSudoku(char[][] board) {
+
+    }
+
+    class Solution {
+        public boolean isValidSudoku(char[][] board) {
+            int[][] rows = new int[9][9];
+            int[][] columns = new int[9][9];
+            int[][][] subboxes = new int[3][3][9];
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    char c = board[i][j];
+                    if (c != '.') {
+                        int index = c - '0' - 1;
+                        rows[i][index]++;
+                        columns[j][index]++;
+                        subboxes[i / 3][j / 3][index]++;
+                        if (rows[i][index] > 1 || columns[j][index] > 1 || subboxes[i / 3][j / 3][index] > 1) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
+     * ✔	[36]有效的数独	63.1%	Medium	0.0%
+     *
+     * @param board
+     * @return
+     */
+    public boolean isValidSudoku(char[][] board) {
+        char[][] reverse = new char[9][9];
+        for (int i = 0; i < board.length; i++) {
+            char[] cs = board[i];
+            if (!isValidArray(cs)) {
+                return false;
+            }
+            for (int j = 0; j < board.length; j++) {
+                reverse[j][i] = board[i][j];
+            }
+        }
+        for (int i = 0; i < reverse.length; i++) {
+            char[] cs = reverse[i];
+            if (!isValidArray(cs)) {
+                return isValidArray(cs);
+            }
+        }
+        for (int i = 0; i < board.length; i += 3) {
+            char[] cs = new char[9];
+            for (int j = 0; j < 3; j++) {
+                cs[j] = board[i][j];
+                cs[j + 3] = board[i + 1][j];
+                cs[j + 6] = board[i + 2][j];
+            }
+            if (!isValidArray(cs)) {
+                return isValidArray(cs);
+            }
+            cs = new char[9];
+            for (int j = 0; j < 3; j++) {
+                cs[j] = board[i][j + 3];
+                cs[j + 3] = board[i + 1][j + 3];
+                cs[j + 6] = board[i + 2][j + 3];
+            }
+            if (!isValidArray(cs)) {
+                return isValidArray(cs);
+            }
+            cs = new char[9];
+            for (int j = 0; j < 3; j++) {
+                cs[j] = board[i][j + 6];
+                cs[j + 3] = board[i + 1][j + 6];
+                cs[j + 6] = board[i + 2][j + 6];
+            }
+            if (!isValidArray(cs)) {
+                return isValidArray(cs);
+            }
+        }
         return true;
+    }
+
+    public boolean isValidArray(char[] board) {
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        for (char c : board) {
+            if (Character.isDigit(c)) {
+                if (map.get(c) != null) {
+                    return false;
+                } else {
+                    map.put(c, 1);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * ✔	[35]搜索插入位置	45.3%	Easy	0.0%
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int searchInsert(int[] nums, int target) {
+        int l = 0;
+        int r = nums.length - 1;
+        int m = 0;
+        while (l < r) {
+            m = (l + r) / 2;
+            if (nums[m] >= target) {
+                r = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        if (nums[l] < target) l++;
+        return l;
+    }
+
+    /**
+     * ✔	[34]在排序数组中查找元素的第一个和最后一个位置	42.7%	Medium	0.0%
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length < 1) return new int[]{-1, -1};
+        if (nums.length == 1) {
+            if (nums[0] == target) {
+                return new int[]{0, 0};
+            } else {
+                return new int[]{-1, -1};
+            }
+        }
+        int l = 0;
+        int r = nums.length - 1;
+        int m = 0;
+        while (l < r) {
+            m = (l + r) / 2;
+            if (nums[m] >= target) {
+                r = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        if (nums[l] != target) {
+            return new int[]{-1, -1};
+        }
+        int li = l;
+        r = nums.length - 1;
+        while (l < r) {
+            m = (l + r) / 2;
+            if (nums[m] <= target) {
+                l = m + 1;
+            } else {
+                r = m;
+            }
+        }
+        if (nums[l] != target) {
+            l--;
+        }
+        return new int[]{li, l};
+    }
+
+    /**
+     * ✔	[33]搜索旋转排序数组	43.9%	Medium	0.0%
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        int m = 0;
+        int l = 0;
+        int r = nums.length - 1;
+        while (l <= r) {
+            m = (l + r) / 2;
+            if (nums[m] < nums[r]) {
+                r = m;
+            } else {//4 5 0 1 2 3
+                l = m + 1;
+            }
+        }
+        if (target >= nums[0]) {
+            l = 0;
+            r = m - 1;
+            if (m == 0) {
+                r = nums.length - 1;
+            }
+        } else {
+            l = m;
+            r = nums.length - 1;
+        }
+        int mid = 0;
+        while (l <= r) {
+            mid = (l + r) / 2;
+            if (target > nums[mid]) {
+                l = mid + 1;
+            } else if (target < nums[mid]) {
+                r = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+    public int longestValidParentheses(String s) {
+        int max = 0;
+        int[] dp = new int[s.length()];
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == ')') {
+                if (s.charAt(i - 1) == '(') {
+                    dp[i] = (i > 1 ? dp[i - 2] : 0) + 2;
+                } else if (i > dp[i - 1] && s.charAt(i - dp[i - 1] - 1) == '(') {
+                    dp[i] = (i - dp[i - 1] > 2 ? dp[i - dp[i - 1] - 2] : 0) + dp[i - 1] + 2;
+                }
+                max = Math.max(max, dp[i]);
+            }
+        }
+        return max;
+    }
+
+//        public int removeDuplicates3(int[] nums) {
+//        int k = 1;
+//        int num = 1;
+//        for (int i = 1; i < nums.length; i++) {
+//            if (nums[i] != nums[k - 1]) {
+//                nums[k++] = nums[i];
+//                num = 1;
+//                continue;
+//            }
+//            num++;
+//            if (num == 2) {
+//                nums[k++] = nums[i];
+//            }
+//        }
+//        return k;
+//    }
+//
+//        public int removeDuplicates1(int[] nums) {
+//        int k = 1;
+//        for (int i = 1; i < nums.length; i++) {
+//            if (nums[i] != nums[k - 1]) {
+//                nums[k++] = nums[i];
+//            }
+//        }
+//        return k;
+//    }
+//
+//        public int removeElement1(int[] nums, int val) {
+//        int p = nums.length - 1;
+//        for (int i = p; i >= 0; i--) {
+//            if (nums[i] == val) {
+//                int temp = nums[i];
+//                nums[i] = nums[p];
+//                nums[p] = temp;
+//                p--;
+//            }
+//        }
+//        return p + 1;
+//    }
+//
+//        public void merge(int[] nums1, int m, int[] nums2, int n) {
+//        int p = nums1.length - 1;
+//        m--;
+//        n--;
+//        while (m >= 0 && n >= 0) {
+//            nums1[p--] = nums1[m] > nums2[n] ? nums1[m--] : nums2[n--];
+//        }
+//        System.arraycopy(nums2, 0, nums1, 0, n + 1);
+//    }
+//
+//        public void merge2(int[] nums1, int m, int[] nums2, int n) {
+//        int len = m + n - 1;
+//        int len1 = m - 1;
+//        int len2 = n - 1;
+//        while (len1 >= 0 && len2 >= 0) {
+//            nums1[len--] = nums1[len1] >= nums2[len2] ?
+//                    nums1[len1--] : nums2[len2--];
+//        }
+//        //如果num1的数全部遍历完毕了，但len2还没有遍历，所以只要将len2剩余的元素全部复制到len1中，此时len2的长度根据len2中剩下的元素的长度来决定
+//        //但是如果num2全部遍历完了，那么此时的len2就是为-1了，所以当你在将num2复制到num1时，复制的长度为0，所以不复制任何元素过去
+//        System.arraycopy(nums2, 0, nums1, 0, len2 + 1);
+//    }
+//
+//        public void merge1(int[] nums1, int m, int[] nums2, int n) {
+//        System.arraycopy(nums2, 0, nums1, m, n);
+//        for (int i = 0; i < nums1.length - 1; i++) {
+//            for (int j = i + 1; j < nums1.length; j++) {
+//                if (nums1[i] > nums1[j]) {
+//                    int temp = nums1[i];
+//                    nums1[i] = nums1[j];
+//                    nums1[j] = temp;
+//                }
+//            }
+//        }
+//    }
+//
+//        public boolean test() {
+//        ListNode ln = new ListNode(1, new ListNode(2, new ListNode(5, new ListNode(6, new ListNode(8)))));
+//        ListNode ln1 = new ListNode(1);
+//        ListNode ln2 = new ListNode(3, new ListNode(6));
+//        ListNode ln3 = new ListNode(3, new ListNode(6, new ListNode(8)));
+//        ListNode[] listNodes = new ListNode[]{ln, ln1, ln2};
+//        ListNode res = reverseKGroup2(ln, 3);
+//        return true;
+//    }
+
+    /**
+     * ✔	[31]下一个排列	38.6%	Medium	0.0%
+     *
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        boolean found = false;
+        int v = Integer.MAX_VALUE;
+        int index = -1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[j] > nums[i]) {
+                    if (nums[j] < v) {
+                        index = j;
+                        v = nums[j];
+                        found = true;
+                    }
+                }
+            }
+            if (found) {
+                swap(nums, i, index);
+                Arrays.sort(nums, i + 1, nums.length);
+                break;
+            }
+        }
+        if (!found) {
+            Arrays.sort(nums);
+        }
+    }
+
+    public void swap(int[] nums, int i, int j) {
+        nums[i] ^= nums[j];
+        nums[j] ^= nums[i];
+        nums[i] ^= nums[j];
+    }
+
+    public void reverse(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+
+    public void reverse(int[] nums, int start) {
+        int left = start, right = nums.length - 1;
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+
+
+    /**
+     * ✔	[30]串联所有单词的子串	39.5%	Hard	0.0%
+     *
+     * @param s
+     * @param words
+     * @return
+     */
+    public List<Integer> findSubstring(String s, String[] words) {
+        Set<String> res = new HashSet<>();
+        List<Integer> list = new ArrayList<>();
+        int m = words.length;
+        int n = words[0].length();
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            map.put(words[i], map.getOrDefault(words[i], 0) + 1);
+        }
+        Map<String, Integer> match = new HashMap<>();
+        for (int i = 0; i < s.length() - m * n + 1; i++) {
+            match.clear();
+            String s1 = s.substring(i, i + m * n);
+            for (int j = 0; j < s1.length(); j += n) {
+                String s2 = s1.substring(j, j + n);
+                match.put(s2, match.getOrDefault(s2, 0) + 1);
+            }
+            boolean b = compareMap(map, match);
+            if (b) {
+                list.add(i);
+            }
+        }
+        return list;
+    }
+
+    private boolean compareMap(Map<String, Integer> map, Map<String, Integer> match) {
+        if (map.size() != match.size()) return false;
+        String s1 = map.entrySet().stream().map(s -> s.getKey() + s.getValue()).sorted().collect(Collectors.joining());
+        String s2 = match.entrySet().stream().map(s -> s.getKey() + s.getValue()).sorted().collect(Collectors.joining());
+        return s1.equals(s2);
     }
 
 
@@ -967,7 +1527,7 @@ public class LeetCode {
      * @param p
      * @return
      */
-    public static boolean isMatch(@NotNull String s, String p) {
+    public static boolean isMatch(String s, String p) {
         // todo 没看懂
         int m = s.length();
         int n = p.length();

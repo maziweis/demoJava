@@ -3,28 +3,385 @@ package com.example.demo.Algorithm;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class LeetCode {
     public static void main(String[] args) {
 
 
-        int[] a = {1, 1, 2};
-//        System.out.println(isValid("([]{})"));
-        String s = "barfoothefoobarman";
-        String[] words = new String[]{"foo", "bar"};
-//        new LeetCode().generateParenthesis(3);
-//        System.out.println(isMatch("aabd", "a*"));
-//        System.out.println(new LeetCode().findSubstring(s, words).toString());
-        int[] nums1 = new int[]{5, 7, 7, 9, 9, 10};
+        String s = "   fly me   to   the moon  ";
+        String[] words = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
+        int[] nums1 = new int[]{3, 2, 1, 0, 4};
         int m = 3;
-        int[] nums2 = new int[]{2, 1, 1};
-        int[][] nums3 = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        int n = 3;
-//        new LeetCode().reverse(nums1);
-        char[][] board = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'}, {'6', '.', '.', '1', '9', '5', '.', '.', '.'}, {'.', '9', '8', '.', '.', '.', '.', '6', '.'}, {'8', '.', '.', '.', '6', '.', '.', '.', '3'}, {'4', '.', '.', '8', '.', '3', '.', '.', '1'}, {'7', '.', '.', '.', '2', '.', '.', '.', '6'}, {'.', '6', '.', '.', '.', '.', '2', '8', '.'}, {'.', '.', '.', '4', '1', '9', '.', '.', '5'}, {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
-        new LeetCode().rotate(nums3);
-//        System.out.println(ss);
+        int[][] nums3 = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+
+        new LeetCode().test();
+//        double res = new LeetCode().myPow(2.0, 15);
+//        System.out.println(res);
+    }
+
+    public void test() {
+        ListNode listNode = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
+        rotateRight(listNode, 2);
+    }
+
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+        int i = 1, x = 0;
+        ListNode temp = head;
+        ListNode left = head;
+        ListNode right = head;
+        while (temp.next != null) {
+            i++;
+            temp = temp.next;
+        }
+        k %= i;
+        if (k == 0) return head;
+        k = i - k;
+        temp = head;
+        while (x < i) {
+            x++;
+            if (x == k) {
+                head = temp.next;
+                left = temp.next;
+                temp.next = null;
+                while (head.next != null) {
+                    head = head.next;
+                }
+                head.next = right;
+                break;
+            }
+            temp = temp.next;
+        }
+        return left;
+    }
+
+    public String getPermutation(int n, int k) {
+        if (n == 1) return "1";
+        int result = 1;
+        List<Integer> deque = new ArrayList<>();
+        for (int i = 1; i < n; i++) {
+            deque.add(i);
+            result *= i;
+        }
+        deque.add(n);
+        String s = "";
+        for (int i = 1; i < n; i++) {
+            int f = k / result;
+            k = k % result;
+            if (k == 0) {
+                s += deque.remove(f - 1);
+                for (int j = deque.size() - 1; j >= 0; j--) {
+                    s += deque.get(j);
+                }
+                break;
+            } else {
+                s += deque.remove(f);
+                if (i == n - 1) {
+                    s += deque.remove(f);
+                    break;
+                }
+                result /= n - i;
+            }
+        }
+        return s;
+    }
+
+    public void getPermutationBack(int n, List<Integer> list, List<String> res, int k) {
+        if (res.size() == k) {
+            return;
+        }
+        if (list.size() == n) {
+            res.add(list.stream().map(Object::toString).collect(Collectors.joining()));
+        } else {
+            for (int i = 1; i <= n; i++) {
+                if (list.contains(i)) continue;
+                list.add(i);
+                getPermutationBack(n, list, res, k);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+
+    public int[][] generateMatrix(int n) {
+        int[][] a = new int[n][n];
+        int t = 0, b = n - 1, l = 0, r = n - 1;
+        int x = 0, y = 0;
+        int len = n * n;
+        int i = 1;
+        while (i <= len) {
+            while (x == t) {
+                a[x][y++] = i++;
+                if (y == r + 1) {
+                    y--;
+                    t++;
+                }
+            }
+            if (i > len) return a;
+            x++;
+            while (y == r) {
+                a[x++][y] = i++;
+                if (x == b + 1) {
+                    x--;
+                    r--;
+                }
+            }
+            if (i > len) return a;
+            y--;
+            while (x == b) {
+                a[x][y--] = i++;
+                if (y == l - 1) {
+                    y++;
+                    b--;
+                }
+            }
+            if (i > len) return a;
+            x--;
+            while (y == l) {
+                a[x--][y] = i++;
+                if (x == t - 1) {
+                    x++;
+                    l++;
+                }
+            }
+            y++;
+        }
+        return a;
+    }
+
+    public int lengthOfLastWord(String s) {
+        String[] sA = s.split(" ");
+        return sA[sA.length - 1].length();
+    }
+
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int newA[][] = new int[intervals.length + 1][];
+        System.arraycopy(intervals, 0, newA, 0, intervals.length);
+        newA[intervals.length] = newInterval;
+        return merge(newA);
+    }
+
+
+    public int[][] merge(int[][] intervals) {
+        int[][] res = new int[intervals.length][];
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        int index = 0;
+        if (intervals.length <= 1) return intervals;
+        for (int i = 1, l = 0; i < intervals.length; i++) {
+            if (intervals[l][1] >= intervals[i][0]) {
+                intervals[l][1] = Math.max(intervals[i][1], intervals[l][1]);
+            } else {
+                res[index++] = intervals[l];
+                l = i;
+            }
+            if (i == intervals.length - 1) {
+                if (intervals[l][1] >= intervals[i][0]) {
+                    res[index++] = intervals[l];
+                } else
+                    res[index++] = intervals[i];
+            }
+        }
+        int[][] res1 = new int[index][];
+        System.arraycopy(res, 0, res1, 0, index);
+        return res1;
+    }
+
+    public void testStream() {
+        List<String> originalList = Arrays.asList("apple", "banana", "apple", "orange", "banana", "grape");
+
+        // 使用流和Collectors.groupingBy收集每个元素的数量
+        Map<String, Long> frequencyMap = originalList.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        // 从频率映射中筛选出数量大于1（即重复）的元素，并转换为新的List<String>
+        List<String> duplicates = frequencyMap.entrySet().stream()
+                .filter(entry -> entry.getValue() > 1)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        System.out.println(duplicates);
+    }
+
+
+    public boolean canJump(int[] nums) {
+        int max = 0;
+        for (int i = 0; i < nums.length && i < max; i++) {
+            max = Math.max(max, i + nums[i]);
+            if (max >= nums.length - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int t = 0, b = matrix.length - 1, l = 0, r = matrix[0].length - 1;
+        List<Integer> list = new ArrayList<>();
+        int x = 0, y = 0;
+        int len = matrix.length * matrix[0].length;
+        while (list.size() < len) {
+            while (x == t) {//0
+                list.add(matrix[x][y++]);
+                if (y == r + 1) {
+                    t++;//1
+                    y--;//2
+                }
+            }
+            if (list.size() == len) break;
+            x++;
+            while (y == r) {
+                list.add(matrix[x++][y]);
+                if (x == b + 1) {
+                    r--;//1
+                    x--;//2
+                }
+            }
+            if (list.size() == len) break;
+            y--;
+            while (x == b) {
+                list.add(matrix[x][y--]);
+                if (y == l - 1) {
+                    b--;//1
+                    y++;//0
+                }
+            }
+            if (list.size() == len) break;
+            x--;
+            while (y == l) {
+                list.add(matrix[x--][y]);
+                if (x == t - 1) {
+                    l++;
+                    x++;
+                }
+            }
+            y++;
+        }
+        return list;
+    }
+
+    public int maxSubArray(int[] nums) {
+        int dp[] = new int[nums.length];
+        dp[0] = nums[0];
+        int max = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] > 0) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
+
+    public int totalNQueens(int n) {
+        List<List<String>> queens = new ArrayList<>();
+        solveNQueensBack(queens, n, new ArrayList<>());
+        return queens.size();
+    }
+
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> queens = new ArrayList<>();
+        solveNQueensBack(queens, n, new ArrayList<>());
+        return queens;
+    }
+
+    private void solveNQueensBack(List<List<String>> queens, int n, List<Integer> res) {
+        if (res.size() == n) {
+            List<String> temp = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                char[] s = new char[n];
+                Arrays.fill(s, '.');
+                s[res.get(j)] = 'Q';
+                String s1 = new String(s);
+                temp.add(s1);
+            }
+            queens.add(temp);
+        } else {
+            for (int i = 0; i < n; i++) {
+                if (!isOk(res, i)) continue;
+                res.add(i);
+                solveNQueensBack(queens, n, res);
+                res.remove(res.get(res.size() - 1));
+            }
+        }
+    }
+
+    public boolean isOk(List<Integer> res, int n) {
+        for (int i = 0; i < res.size(); i++) {
+            if (res.get(i) == n) return false;
+            if (Math.abs(res.get(i) - n) == Math.abs(res.size() - i)) return false;
+        }
+        return true;
+    }
+
+    public void addQueen(List<String> list, int[] cur, int n) {
+        for (int i = cur[0] + 1, j = 1; cur[1] >= j & i < n; i++, j++) {
+            list.add(i + "," + (cur[1] - j));
+        }
+        for (int i = cur[0] + 1; i < n; i++) {
+            list.add(i + "," + cur[1]);
+        }
+        for (int i = cur[0] + 1, j = 1; cur[1] + j < n & i < n; i++, j++) {
+            list.add(i + "," + (cur[1] + j));
+        }
+    }
+
+    public double myPow(double x, int n) {
+        double p = 1.0;
+        long m = n;
+        m = n > 0 ? m : -m;
+        while (m > 0) {
+            if (m % 2 == 1) {
+                p *= x;
+            }
+            x *= x;
+            m /= 2;
+        }
+        return n > 0 ? p : 1 / p;
+    }
+
+    public double myPow1(double x, int n) {
+        double p = 1.0;
+        long m = n;
+        m = n > 0 ? m : -m;
+        return n > 0 ? myPowHandle(x, m) : 1 / myPowHandle(x, m);
+    }
+
+    public double myPowHandle(double x, long n) {
+        double p = 1.0;
+        if (n % 2 == 1) {
+            p *= x;
+        }
+        n /= 2;
+        return p * myPowHandle(x, n) * myPowHandle(x, n);
+    }
+
+    public List<List<String>> groupAnagrams1(String[] strs) {
+        List<List<String>> collect = Arrays.stream(strs).
+                collect(Collectors.groupingBy(
+                        str -> str.chars().sorted().collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                                .toString())).values().stream().collect(Collectors.toList());
+        return collect;
+    }
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            String s = stringSort(str);
+            List<String> stringList = map.getOrDefault(s, new ArrayList<>());
+            stringList.add(str);
+            map.put(s, stringList);
+        }
+        List<List<String>> res = new ArrayList<>();
+        map.values().forEach(s -> res.add(s.stream().sorted().collect(Collectors.toList())));
+        Collections.sort(res, (a, b) -> a.size() - b.size());
+        return res;
+    }
+
+    public String stringSort(String s) {
+        char[] cs = s.toCharArray();
+        Arrays.sort(cs);
+        return new String(cs);
     }
 
     public void rotate(int[][] matrix) {
